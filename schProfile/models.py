@@ -8,18 +8,18 @@ from .constants import Gender, school_level, School_type
 
 class schoolProfile(models.Model):
   user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-  schoolName  = models.CharField(max_length=255)
-  school_badge = models.ImageField(upload_to='profile/badge',)
-  school_gender = models.CharField(max_length=255, choices = Gender)
-  school_type = models.CharField(max_length=255, choices=School_type)
-  school_address = models.TextField()
-  extral_curriculum_activities = models.TextField()
+  schoolName  = models.CharField(max_length=255, blank=True, null=True)
+  school_badge = models.ImageField(upload_to='profile/badge', blank=True, null=True)
+  school_gender = models.CharField(max_length=255, choices = Gender, blank=True, null=True)
+  school_type = models.CharField(max_length=255, choices=School_type, blank=True, null=True)
+  school_address = models.TextField(blank=True, null=True)
+  extral_curriculum_activities = models.TextField(blank=True, null=True)
   intro_video = models.FileField(upload_to = 'profile/video', blank=True, null=True)
-  state = models.CharField(max_length=255)
-  school_email = models.EmailField(max_length=254)
-  school_tel = models.CharField(max_length = 150)
-  school_curriculum = models.CharField(max_length=255)
-  schoolfees_range = models.CharField(max_length=255)
+  state = models.CharField(max_length=255, blank=True, null=True)
+  school_email = models.EmailField(max_length=254, blank=True, null=True)
+  school_tel = models.CharField(max_length = 150, blank=True, null=True)
+  school_curriculum = models.CharField(max_length=255, blank=True, null=True)
+  schoolfees_range = models.CharField(max_length=255, blank=True, null=True)
 
   class Meta:
     verbose_name = 'School Profile'
