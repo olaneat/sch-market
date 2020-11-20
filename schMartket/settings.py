@@ -70,8 +70,17 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'schMartket.wsgi.application'
 
+
+WSGI_APPLICATION = 'schMartket.wsgi.application'
+REST_FRAMEWORK = {
+   'DEFAULT_AUTHENTICATION_CLASSES': (
+       'rest_framework_simplejwt.authentication.JWTAuthentication',
+   ),
+   'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated'
+   ),
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
