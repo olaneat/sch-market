@@ -1,33 +1,33 @@
 from rest_framework import generics
-from .serializers import SchoolProfileSerializer
-from .models import schoolProfile 
+from .models import schoolProfile
 from rest_framework import permissions
-
-
-class ProfileListView(generics.ListAPIView):
-  queryset = schoolProfile.objects.all()
-  serializer_class = SchoolProfileSerializer
-  permission_class = (permissions.IsAdminUser,)
+from .serializers import schoolProfileSerializer
 
 class CreateProfileView(generics.CreateAPIView):
+  serializer_class = schoolProfileSerializer
   queryset = schoolProfile.objects.all()
-  serializer_class = SchoolProfileSerializer
-  
-  def perform_create(self, serializer):
-	  serializer.save(user=self.request.user)
+  permission_classes = [permissions.AllowAny]
 
-class SchoolProfileDetailView(generics.RetrieveAPIView):
+  def perform_create(self, serializer):
+    serializer.save(user=self.request.user)
+
+class DisplaySchoolList(generics.ListAPIView):
+  serializer_class = schoolProfileSerializer
   queryset = schoolProfile.objects.all()
-  serializer_class = SchoolProfileSerializer
+  permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+class DispaySchoolDetail(generics.RetrieveAPIView):
+  permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+  serializer_class = schoolProfileSerializer
+  queryset = schoolProfile.objects.all()
+
+class UpdateSchoolProrfile(generics.UpdateAPIView):
   permission_classes = [permissions.IsAuthenticated]
+  queryset = schoolProfile.objects.all()
+  serializer_class = schoolProfileSerializer
 
 class DeleteSchoolProfile(generics.DestroyAPIView):
-  queryset = schoolProfile.objects.all()
-  serializer_class = SchoolProfileSerializer
   permission_classes = [permissions.IsAuthenticated]
-
-
-class updateSchoolProfile(generics.UpdateAPIView):
+  serializer_class = schoolProfileSerializer
   queryset = schoolProfile.objects.all()
-  serializer_class = SchoolProfileSerializer
-  permission_classes = [permissions.IsAuthenticated]
+  

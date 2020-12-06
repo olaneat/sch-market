@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
-from schProfile.serializers import SchoolProfileSerializer 
+from schProfile.serializers import schoolProfileSerializer
 from .models import CustomUser
 
 
@@ -49,7 +49,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     )
 
     token = serializers.CharField(max_length=255, read_only=True)
-    profile = SchoolProfileSerializer(read_only=True)
+    profile = schoolProfileSerializer(read_only=True)
 
     class Meta:
         model = CustomUser

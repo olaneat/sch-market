@@ -1,17 +1,17 @@
+Level = (
+  ('Pri', 'Primary'),
+  ('Sec', 'Secondary'),
+  ('Both', 'Both')
+)
+
 Gender = (
-  ('Male', 'M'),
-  ('Female', 'F'),
-  ('Mixed', 'Mixed')
+  ('Male', 'Male'),
+  ('Female', 'Female'),
+  ('Both', 'Both')
 )
 
-School_type = (
-  ('Day', 'Day'),
+Type = (
   ('Boarding', 'Boarding'),
-  ('Mixed', 'Mixed')
-)
-
-school_level = (
-  ('Primary', 'Primary'),
-  ('Both', 'Both'),
-  ('Secondary', 'Secondary')
+  ('Day', 'Day'),
+  ('Both', 'Both')
 )
