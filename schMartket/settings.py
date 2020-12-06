@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     #myapps
     'register',
+    'schoolDetail',
     'schProfile',
 ]
 SITE_ID = 1

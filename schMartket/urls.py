@@ -7,6 +7,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('register.urls', namespace='register')),
     path('profile/', include('schProfile.urls', namespace='profile')),
+    path('school-detail/', include('schoolDetail.urls', namespace="sch-detail")),
     path('api/token/', jwt_views.TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', jwt_views.TokenRefreshView.as_view(),name='token_refresh'),
 ]
