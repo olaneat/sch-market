@@ -4,5 +4,5 @@ from .apiviews import CreateProfileView, UpdateSchoolProrfile, DeleteSchoolProfi
 app_name = 'profile'
 urlpatterns = [
     path('create', CreateProfileView.as_view(), name='create-profile'),
-    path('list', DisplaySchoolList.as_view(), name='scrhool-list')
+    path('list', DisplaySchoolList.as_view(), name='school-list')
 ]

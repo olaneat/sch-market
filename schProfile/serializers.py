@@ -10,10 +10,11 @@ class schoolProfileSerializer(serializers.ModelSerializer):
   class Meta:
     model = schoolProfile
     fields = ( 'email', 'id', 'username', 'school_name',
-              'address', 'badge', 'gender', 'introVideo', 'level',
-              'state', 'curriculum', 'extraCurriculumActivities',
-              'website', 'clubs', 'phoneNumber', 'schoolType',
-              'schoolEmail'
+              'address', 'badge', 'gender', 'level',
+              'state', 'curriculum', 'extra_curriculum_activities',
+              'website', 'clubs', 'school_phone_number', 'school_type',
+              'school_email', 'school_facilities', 'awards_won', 'date_established',
+              'school_fees_range', 'motto'
     )
 
   def create(self, validated_data, instance=None):

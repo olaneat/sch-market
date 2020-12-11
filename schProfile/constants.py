@@ -1,6 +1,6 @@
 Level = (
-  ('Pri', 'Primary'),
-  ('Sec', 'Secondary'),
+  ('Primary', 'Primary'),
+  ('Secondary', 'Secondary'),
   ('Both', 'Both')
 )
 
