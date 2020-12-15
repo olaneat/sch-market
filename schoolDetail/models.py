@@ -16,4 +16,17 @@ class Gallery(models.Model):
     verbose_name_plural = ' School Galleries'
     ordering = ('-school',)
 
+  def __str__(self):
+      return self.picture.name
+  
+class SchoolVideo(models.Model):
+  user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+  intro_video = models.FileField(upload_to='assets/videos', blank=True, null=True)
+  
+  class Meta:
+    ordering = ('-user',)
+
+  
+
+
   

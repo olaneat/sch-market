@@ -48,12 +48,12 @@ class RegistrationSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-    token = serializers.CharField(max_length=255, read_only=True)
+   # token = serializers.CharField(max_length=255, read_only=True)
     profile = schoolProfileSerializer(read_only=True)
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'username', 'password', 'token', 'profile')
+        fields = ('email', 'username', 'password', 'profile')
     
 
     def create(self, validated_data):

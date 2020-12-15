@@ -56,11 +56,4 @@ class schoolProfile(models.Model):
   '''
 
 
-class SchoolVide(models.Model):
-  user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
-  introVideo = models.FileField(upload_to='assets/videos', blank=True, null=True)
-  
-  class Meta:
-    ordering = ('-user',)
 
-  

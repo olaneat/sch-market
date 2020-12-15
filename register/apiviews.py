@@ -26,7 +26,7 @@ class RegistrationAPIView(APIView):
         serializer.save()
         return Response(
             {
-                'token': serializer.data.get('token', None),
+                
                 'username': serializer.data.get('username', None),
                 'email':serializer.data.get('email', None)
             },

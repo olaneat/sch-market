@@ -6,7 +6,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
   id = serializers.IntegerField(source='pk', read_only=True)
   email = serializers.CharField(source='user.email', read_only=True)
   username = serializers.CharField(source='user.username', read_only=True)
-
+  badge = serializers.ImageField(max_length=None, use_url=True)
   class Meta:
     model = schoolProfile
     fields = ( 'email', 'id', 'username', 'school_name',
