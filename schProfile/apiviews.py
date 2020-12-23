@@ -8,7 +8,7 @@ from .serializers import schoolProfileSerializer
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 
 class CreateProfileView(APIView):
-  parser_classes = (MultiPartParser, FormParser,)
+  parser_classes = (MultiPartParser,)
   serializer_class = schoolProfileSerializer
   queryset = schoolProfile.objects.all()
   permission_classes = [permissions.AllowAny]
@@ -17,7 +17,8 @@ class CreateProfileView(APIView):
     serializer.save(user=self.request.user)
 
   def post(self, request):
-    file_upload = schoolProfileSerializer(data =request.data)
+    
+    file_upload = schoolProfileSerializer(data =request.data, instance=request.user)
     if file_upload.is_valid():
       file_upload.save()
       return Response(file_upload.data, status=status.HTTP_201_CREATED)

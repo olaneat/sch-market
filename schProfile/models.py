@@ -14,7 +14,7 @@ class schoolProfile(models.Model):
   gender  = models.CharField(max_length=20, choices=Gender)
   level = models.CharField(max_length=40, choices=Level)
   state = models.CharField(max_length=100)
-  date_established = models.DateField()
+  date_established = models.DateField(blank=True, null=True)
   curriculum = models.CharField(max_length= 255)
   school_fees_range = models.CharField(max_length=255)
   extra_curriculum_activities = models.TextField()

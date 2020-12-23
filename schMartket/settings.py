@@ -122,15 +122,21 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 REST_FRAMEWORK = {
+
+    'DATE_INPUT_FORMATS': [("%m-%d-%Y"),],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
      ],
+    
+    
+    'DATETIME_FORMAT': '%M-%D-%Y %H-%M-%S',
+    'DATE_FORMAT': '%M-%D-%Y',
 
-     'DEFAULT_PARSER_CLASSES': (
-    'rest_framework.parsers.JSONParser',
-    'rest_framework.parsers.FormParser',
-    'rest_framework.parsers.MultiPartParser',
-),
+    'DEFAULT_PARSER_CLASSES': (
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
+    )  
 }
 
 
@@ -142,7 +148,7 @@ CORS_ALLOWED_ORIGINS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en-en'
 
 TIME_ZONE = 'Africa/Lagos'
 
