@@ -7,7 +7,7 @@ Level = (
 Gender = (
   ('Male', 'Male'),
   ('Female', 'Female'),
-  ('Both', 'Both')
+  ('Mixed', 'Mixed')
 )
 
 Type = (

@@ -123,15 +123,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
 
-    'DATE_INPUT_FORMATS': [("%m-%d-%Y"),],
+    'DATE_INPUT_FORMATS': [("%Y-%m-%d")],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
      ],
     
     
-    'DATETIME_FORMAT': '%M-%D-%Y %H-%M-%S',
-    'DATE_FORMAT': '%M-%D-%Y',
-
+    
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
@@ -156,7 +154,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

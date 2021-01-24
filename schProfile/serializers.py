@@ -39,7 +39,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
   email = serializers.CharField(source='user.email', read_only=True)
   username = serializers.CharField(source='user.username', read_only=True)
   badge = Base64Imagefield(max_length=None, use_url=True)
-  date_established = serializers.DateField(format=None,input_formats=['%m-%d-%Y',])
+  date_established = serializers.DateField(format=None,input_formats=None)
   
 
   class Meta:
