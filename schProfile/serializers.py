@@ -6,7 +6,7 @@ import imghdr
 import base64
 import six
 import uuid
-from .models import schoolProfile
+from .models import Profile
 from register.models import CustomUser
 
 
@@ -43,7 +43,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
   
 
   class Meta:
-    model = schoolProfile
+    model = Profile
     fields = ( 'email', 'id', 'username', 'school_name',
               'address', 'badge', 'gender', 'level',
               'state', 'curriculum', 'extra_curriculum_activities',
@@ -52,10 +52,17 @@ class schoolProfileSerializer(serializers.ModelSerializer):
               'school_fees_range', 'motto'
     )
 
-  def create(self, validated_data, instance=None):
+  '''def create(self, validated_data, instance=None):
     if 'user' in validated_data:
       user = validated_data.pop('user')
     else:
       user = CustomUser.objects.create(**validated_data)
     profile, created_profile = schoolProfile.objects.update_or_create(user=user, **validated_data)
     return profile
+'''
+
+def get_username(self,obj):
+  return obj.user.username
+
+def get_email(self, obj):
+  return obj.user.email

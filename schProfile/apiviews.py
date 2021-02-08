@@ -1,5 +1,5 @@
 from rest_framework import generics
-from .models import schoolProfile
+from .models import Profile
 from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,11 +7,14 @@ from rest_framework.views import APIView
 from .serializers import schoolProfileSerializer
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 
-class CreateProfileView(APIView):
+class CreateProfileView(generics.CreateAPIView):
   parser_classes = (MultiPartParser,)
   serializer_class = schoolProfileSerializer
-  queryset = schoolProfile.objects.all()
+  queryset = Profile.objects.all()
   permission_classes = [permissions.AllowAny]
+
+  
+  '''
 
   def perform_create(self, serializer):
     serializer.save(user=self.request.user)
@@ -25,21 +28,23 @@ class CreateProfileView(APIView):
     else:
       return Response(file_upload.errors, status=status.HTTP_400_BAD_REQUEST )
 
+  
+  '''
 
 class DisplaySchoolList(generics.ListAPIView):
   serializer_class = schoolProfileSerializer
-  queryset = schoolProfile.objects.all()
+  queryset = Profile.objects.all()
   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 class DispaySchoolDetail(generics.RetrieveAPIView):
   permission_classes = [permissions.IsAuthenticatedOrReadOnly]
   serializer_class = schoolProfileSerializer
-  queryset = schoolProfile.objects.all()
+  queryset = Profile.objects.all()
 
 class UpdateSchoolProfile(generics.UpdateAPIView):
   parser_classes = (MultiPartParser, FormParser,)
   permission_classes = [permissions.IsAuthenticated]
-  queryset = schoolProfile.objects.all()
+  queryset = Profile.objects.all()
   serializer_class = schoolProfileSerializer
 
   def post(self, request):
@@ -53,5 +58,5 @@ class UpdateSchoolProfile(generics.UpdateAPIView):
 class DeleteSchoolProfile(generics.DestroyAPIView):
   permission_classes = [permissions.IsAuthenticated]
   serializer_class = schoolProfileSerializer
-  queryset = schoolProfile.objects.all()
+  queryset = Profile.objects.all()
   

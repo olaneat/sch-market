@@ -5,7 +5,7 @@ from .constants import Gender, Type, Level
 from register.models import CustomUser
 # Create your models here.
 
-class schoolProfile(models.Model):
+class Profile(models.Model):
   user = models.OneToOneField(CustomUser,related_name='school_profile', on_delete=models.CASCADE)
   school_name = models.CharField(max_length=255)
   address = models.TextField()
@@ -35,25 +35,12 @@ class schoolProfile(models.Model):
 
   def __str__(self):
       return self.school_name
-  
-  '''
 
-    @receiver(post_save, sender=CustomUser)
-    def create_update_profile(sender, instance=None, created=False, **kwargs):
-      if created:
-        schoolProfile.objects.get_or_create(user=instance)
+@receiver(post_save, sender=CustomUser)
+def create_user_profile(sender, instance, created, **kwargs):
+  if created:
+    Profile.objects.create(user=instance)
 
-    @receiver(post_save, sender=CustomUser)
-    def save_profile(sender, instance=None, **kwargs):
-      instance.profile.save()
-  
-   @receiver(pre_delete, sender=CustomUser)
-  def delete_school_profile(self, sender, instance=None, **kwargs):
-    if instance:
-      profile = schoolProfile.objects.get(user = instance)
-      profile.delete()
-      
-  '''
-
-
-
+@receiver(post_save, sender=CustomUser)
+def save_user_profile(sender, instance, **kwargs):
+  instance.profile.save()
