@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login
 from .serializers import RegistrationSerializer, LoginSerializer
 from  register.models import CustomUser
 
+
 from . import permissions 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):

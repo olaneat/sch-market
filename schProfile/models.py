@@ -6,7 +6,7 @@ from register.models import CustomUser
 # Create your models here.
 
 class Profile(models.Model):
-  user = models.OneToOneField(CustomUser,related_name='school_profile', on_delete=models.CASCADE)
+  user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
   school_name = models.CharField(max_length=255)
   address = models.TextField()
   badge = models.ImageField(upload_to='assets/badge', blank=True, null=True)
@@ -36,11 +36,9 @@ class Profile(models.Model):
   def __str__(self):
       return self.school_name
 
-@receiver(post_save, sender=CustomUser)
-def create_user_profile(sender, instance, created, **kwargs):
-  if created:
+'''
+  @receiver(post_save, sender=CustomUser)
+    def create_school_profile(sender, instance, created, **kwargs):
+    if created:
     Profile.objects.create(user=instance)
-
-@receiver(post_save, sender=CustomUser)
-def save_user_profile(sender, instance, **kwargs):
-  instance.profile.save()
+    instance.profile.save()'''

@@ -14,8 +14,6 @@ class CreateProfileView(generics.CreateAPIView):
   permission_classes = [permissions.AllowAny]
 
   
-  '''
-
   def perform_create(self, serializer):
     serializer.save(user=self.request.user)
 
@@ -28,8 +26,6 @@ class CreateProfileView(generics.CreateAPIView):
     else:
       return Response(file_upload.errors, status=status.HTTP_400_BAD_REQUEST )
 
-  
-  '''
 
 class DisplaySchoolList(generics.ListAPIView):
   serializer_class = schoolProfileSerializer

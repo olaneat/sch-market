@@ -3,6 +3,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from schProfile.serializers import schoolProfileSerializer
+from schProfile.models import Profile
 from .models import CustomUser
 
 
@@ -48,7 +49,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-   # token = serializers.CharField(max_length=255, read_only=True)
     profile = schoolProfileSerializer(read_only=True)
 
     class Meta:
@@ -56,5 +56,5 @@ class RegistrationSerializer(serializers.ModelSerializer):
         fields = ('email', 'username', 'password', 'profile')
     
 
-    def create(self, validated_data):
-        return CustomUser.objects._create_user(**validated_data)
+    
+        

@@ -7,6 +7,8 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as  _
 from django.shortcuts import reverse
+from rest_framework_simplejwt.tokens import RefreshToken
+
 
 class CustomManager(BaseUserManager):
     use_in_migrations = True
@@ -64,7 +66,10 @@ class CustomUser(AbstractUser):
 
     @property
     def token(self):
-        return self._generate_jwt_token()
+        return self._get_token()
+
+    def _get_token(self):
+        return RefreshToken.for_user(self).access_token
     
     def _generate_jwt_token(self):
        dt = datetime.now() + timedelta(minutes=180)
