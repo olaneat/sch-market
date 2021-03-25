@@ -15,6 +15,7 @@ class LoginSerializer(serializers.Serializer):
         email = data.get('email', None)
         password = data.get('password', None)
 
+
         if email is None:
             raise serializers.ValidationError(
                 'An email address is required to log in.'
@@ -54,7 +55,10 @@ class RegistrationSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ('email', 'username', 'password', 'profile')
+
+    def create(self, validated_date):
+        return CustomUser.objects._create_user(**validated_date)
     
 
-    
+
         

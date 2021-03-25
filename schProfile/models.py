@@ -36,9 +36,9 @@ class Profile(models.Model):
   def __str__(self):
       return self.school_name
 
-'''
-  @receiver(post_save, sender=CustomUser)
-    def create_school_profile(sender, instance, created, **kwargs):
-    if created:
-    Profile.objects.create(user=instance)
-    instance.profile.save()'''
+
+@receiver(post_save, sender=CustomUser)
+def create_school_profile(sender, instance=None, created=False, **kwargs):
+  if created:
+    Profile.objects.get_or_create(user=instance)
+  #instance.profile.save()
