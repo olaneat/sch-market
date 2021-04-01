@@ -51,7 +51,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     )
 
     profile = schoolProfileSerializer(read_only=True)
-
+   
     class Meta:
         model = CustomUser
         fields = ('email', 'username', 'password', 'profile')

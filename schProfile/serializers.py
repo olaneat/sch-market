@@ -54,6 +54,10 @@ class schoolProfileSerializer(serializers.ModelSerializer):
 
     
 
+  
+
+  '''
+
   def create(self, validated_data):
     if 'profile' in validated_data:
       user_data = validated_data.pop('profile')
@@ -61,7 +65,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
     Profile.objects.update_or_create(user=user, **validated_data)
     return user
 
-  '''
+    
   def create(self, validated_data, instance=None):
     if 'user' in validated_data:
       user = validated_data.pop('user')

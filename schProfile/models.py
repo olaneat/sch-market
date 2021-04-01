@@ -41,4 +41,4 @@ class Profile(models.Model):
 def create_school_profile(sender, instance=None, created=False, **kwargs):
   if created:
     Profile.objects.get_or_create(user=instance)
-  #instance.profile.save()
+  instance.profile.save()
