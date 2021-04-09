@@ -50,7 +50,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-    profile = schoolProfileSerializer()
+    profile = schoolProfileSerializer(read_only=True)
    
     class Meta:
         model = CustomUser
