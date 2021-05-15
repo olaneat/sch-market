@@ -1,20 +1,18 @@
-from rest_framework import serializers
-from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate
-from django.contrib.auth.models import User
-from schProfile.serializers import schoolProfileSerializer
+
 from schProfile.models import Profile
+from schProfile.serializers import schoolProfileSerializer
 from .models import CustomUser
+from rest_framework import serializers
 
 
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(write_only=True)
     password = serializers.CharField(max_length=128, write_only=True)
     token = serializers.CharField(max_length=255, read_only=True)
+
     def validate(self, data):
         email = data.get('email', None)
         password = data.get('password', None)
-
 
         if email is None:
             raise serializers.ValidationError(
@@ -43,22 +41,21 @@ class LoginSerializer(serializers.Serializer):
         }
 
 
-class RegistrationSerializer(serializers.ModelSerializer):    
+class RegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
         max_length=128,
         min_length=8,
         write_only=True,
     )
 
-    profile = schoolProfileSerializer(read_only=True)
-   
+    profile = schoolProfileSerializer(required=False)
+
     class Meta:
         model = CustomUser
-        fields = ('email', 'username', 'password', 'profile')
+        fields = ('email', 'username',  'password', 'profile')
 
-    def create(self, validated_date):
-        return CustomUser.objects._create_user(**validated_date)
-    
-
-
-        
+    def create(self, validated_data):
+        profile_data = validated_data.pop('schProfile')
+        user = CustomUser.objects._create_user(**validated_data)
+        Profile.objects.create(**profile_data)
+        return user
