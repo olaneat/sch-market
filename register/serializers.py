@@ -1,6 +1,5 @@
-
-from schProfile.models import Profile
 from schProfile.serializers import schoolProfileSerializer
+from schProfile.models import Profile
 from .models import CustomUser
 from rest_framework import serializers
 
@@ -48,14 +47,16 @@ class RegistrationSerializer(serializers.ModelSerializer):
         write_only=True,
     )
 
-    profile = schoolProfileSerializer(required=False)
+    profile = schoolProfileSerializer()
+    user = authenticate(email=email, password=password)
 
     class Meta:
         model = CustomUser
         fields = ('email', 'username',  'password', 'profile')
 
-    def create(self, validated_data):
+    ''' def create(self, validated_data):
         profile_data = validated_data.pop('schProfile')
         user = CustomUser.objects._create_user(**validated_data)
         Profile.objects.create(**profile_data)
         return user
+    '''
