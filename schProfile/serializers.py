@@ -33,23 +33,12 @@ class Base64Imagefield(serializers.ImageField):
 
 
 class schoolProfileSerializer(serializers.ModelSerializer):
-<<<<<<< HEAD
-  id = serializers.IntegerField(source='pk', read_only=True)
-  #parser_classes = (MultiPartParser, FormParser )
-  email = serializers.CharField(source='user.email', read_only=True)
-  username = serializers.CharField(source='user.username', read_only=True)
-  #badge = serializers.ImageField()
-  #badge = Base64Imagefield(max_length=None, use_url=True)
-  date_established = serializers.DateField(format=None,input_formats=None)
-  
-=======
     ##id = serializers.IntegerField(source='pk', read_only=True)
     parser_classes = (MultiPartParser, FormParser, )
     email = serializers.CharField(source='user.email', read_only=True)
     username = serializers.CharField(source='user.username', read_only=True)
     badge = Base64Imagefield(max_length=None, use_url=True)
     date_established = serializers.DateField(format=None, input_formats=None)
->>>>>>> 12ba52972e863c70b7f5c5a5af44436a36324fc9
 
     class Meta:
         model = Profile
@@ -61,17 +50,6 @@ class schoolProfileSerializer(serializers.ModelSerializer):
                   'school_fees_range', 'motto'
                   )
 
-<<<<<<< HEAD
-
-
-  def create(self, validated_data, instance=None):
-    if 'user' in validated_data:
-      user = validated_data.pop('user')
-    else:
-      user = CustomUser.objects._create_user(**validated_data)
-    profile, create_profile = Profile.objects.update_or_create(user=user, default=validated_data)
-    return profile
-=======
     '''
     
   def create(self, validated_data):
@@ -80,7 +58,6 @@ class schoolProfileSerializer(serializers.ModelSerializer):
     user = CustomUser.objects._create_user(**validated_data)
     Profile.objects.update_or_create(user=user, **validated_data)
     return user
->>>>>>> 12ba52972e863c70b7f5c5a5af44436a36324fc9
 
 
     def create(self, validated_data, instance=None):
@@ -99,22 +76,12 @@ class schoolProfileSerializer(serializers.ModelSerializer):
 
     )
     
-<<<<<<< HEAD
-  def create(self, validated_data, instance=None):
-    if 'user' in validated_data:
-      user = validated_data.pop('user')
-    else:
-      user = CustomUser.objects.create(**validated_data)
-    profile, create_profile = Profile.objects.update_or_create(user=user, **validated_data)
-    return profile
-=======
   
   '''
 
 
 def get_username(self, obj):
     return obj.user.username
->>>>>>> 12ba52972e863c70b7f5c5a5af44436a36324fc9
 
 
 def get_email(self, obj):
