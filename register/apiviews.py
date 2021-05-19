@@ -34,6 +34,13 @@ class RegistrationAPIView(APIView):
         )
 
 
+class CreateProfileView(generics.CreateAPIView):
+    parser_classes = (MultiPartParser,)
+    serializer_class = schoolProfileSerializer
+    queryset = Profile.objects.all()
+    permission_classes = [permissions.AllowAny]
+
+
 class LoginAPIView(APIView):
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
