@@ -1,10 +1,9 @@
 from django.db import models
-from django.db.models.signals import pre_delete, post_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
+
 from .constants import Gender, Type, Level
 from register.models import CustomUser
-
-# Create your models here.
 
 
 class Profile(models.Model):

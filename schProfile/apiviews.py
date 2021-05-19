@@ -1,10 +1,9 @@
-from rest_framework import generics
-from .models import Profile
-from rest_framework import permissions
-from rest_framework.response import Response
-from rest_framework import status
-from .serializers import schoolProfileSerializer
+from rest_framework import generics, permissions, status
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.response import Response
+
+from .models import Profile
+from .serializers import schoolProfileSerializer
 
 
 class CreateProfileView(generics.CreateAPIView):

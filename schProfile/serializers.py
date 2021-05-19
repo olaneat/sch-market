@@ -1,13 +1,15 @@
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework import serializers
-
-from django.core.files.base import ContentFile
 import base64
+import uuid
+
 import imghdr
 import six
-import uuid
-from .models import Profile
 
+from django.core.files.base import ContentFile
+
+from rest_framework import serializers
+from rest_framework.parsers import MultiPartParser, FormParser
+
+from .models import Profile
 from register.models import CustomUser
 
 
