@@ -11,7 +11,7 @@ class Profile(models.Model):
         CustomUser, related_name='profile', on_delete=models.CASCADE)
     school_name = models.CharField(max_length=255)
     address = models.TextField()
-    badge = models.ImageField(upload_to='assets/badge', blank=True, null=True)
+    badge = models.ImageField(upload_to="assets/badge", blank=True, null=True)
     school_type = models.CharField(max_length=50, choices=Type)
     gender = models.CharField(max_length=20, choices=Gender)
     level = models.CharField(max_length=40, choices=Level)
@@ -25,7 +25,7 @@ class Profile(models.Model):
     motto = models.CharField(max_length=255)
     website = models.URLField(blank=True, null=True)
     clubs = models.TextField()
-    school_facilities = models.TextField
+    school_facilities = models.TextField()
     awards_won = models.TextField()
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)

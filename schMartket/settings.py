@@ -18,7 +18,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -29,16 +28,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
 
-    #3rd party
+
+    # 3rd party
     'corsheaders',
-    'rest_framework',	
+    'rest_framework',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
 
-    #myapps
+    # myapps
     'register',
     'schoolDetail',
     'schProfile',
@@ -76,15 +75,14 @@ TEMPLATES = [
 ]
 
 
-
 WSGI_APPLICATION = 'schMartket.wsgi.application'
 REST_FRAMEWORK = {
-   'DEFAULT_AUTHENTICATION_CLASSES': (
-       'rest_framework_simplejwt.authentication.JWTAuthentication',
-   ),
-   'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated'
-   ),
+    ),
 }
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
@@ -126,21 +124,25 @@ REST_FRAMEWORK = {
     'DATE_INPUT_FORMATS': [("%Y-%m-%d")],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-     ],
-    
-    
-    
+    ],
+
+
+
     'DEFAULT_PARSER_CLASSES': (
         'rest_framework.parsers.JSONParser',
         'rest_framework.parsers.FormParser',
         'rest_framework.parsers.MultiPartParser',
-    )  
+    )
 }
 
+SIMPLE_JWT = {
+    'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': True,
+}
 
 CORS_ALLOWED_ORIGINS = [
-	'http://localhost:4200',
-	'http://127.0.0.1:4200',
+    'http://localhost:4200',
+    'http://127.0.0.1:4200',
 ]
 
 # Internationalization
@@ -161,5 +163,5 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_URL =  '/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
