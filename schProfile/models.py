@@ -1,12 +1,14 @@
 from django.db import models
-from django.db.models.signals import pre_delete, post_save
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from .constants import Gender, Type, Level
 from register.models import CustomUser
+import uuid
 # Create your models here.
 
 
 class Profile(models.Model):
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField(
         CustomUser, related_name='profile', on_delete=models.CASCADE)
     school_name = models.CharField(max_length=255)
@@ -16,7 +18,7 @@ class Profile(models.Model):
     gender = models.CharField(max_length=20, choices=Gender)
     level = models.CharField(max_length=40, choices=Level)
     state = models.CharField(max_length=100)
-    date_established = models.DateTimeField(blank=True, null=True)
+    date_established = models.DateField(blank=True, null=True)
     curriculum = models.CharField(max_length=255)
     school_fees_range = models.CharField(max_length=255)
     extra_curriculum_activities = models.TextField()
