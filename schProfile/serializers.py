@@ -35,7 +35,7 @@ class Base64Imagefield(serializers.ImageField):
 
 
 class schoolProfileSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source="pk", read_only=True)
+    id = serializers.IntegerField(source="user.id", read_only=True)
     parser_classes = (
         MultiPartParser,
         FormParser,

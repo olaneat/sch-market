@@ -21,15 +21,16 @@ class CustomManager(BaseUserManager):
             raise ValueError('username is required')
 
         email = self.normalize_email(email)
+        #user = self.model(email=email, username=username)
         user = self.model(email=email, username=username)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-        def create_user(self, email, username, password=None, **extra_fields):
-            extra_fields.setdefault('is_staff', False)
-            extra_fields.setdefault('is_superuser', False)
-            return self._create_user(email, username, password, **extra_fields)
+    def create_user(self, email, username, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', False)
+        extra_fields.setdefault('is_superuser', False)
+        return self._create_user(email, username, password, **extra_fields)
 
     def create_superuser(self, username, email, password, **extra_fields):
         if password is None:
@@ -52,7 +53,8 @@ class CustomManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, unique=True, editable=False)
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=255, unique=True, db_index=True)
     password = models.CharField(max_length=100)
