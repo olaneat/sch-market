@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'schProfile',
 ]
 SITE_ID = 1
-
+AUTH_USER_MODEL = 'register.CustomUser'
+AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -56,7 +57,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'schMartket.urls'
-AUTH_USER_MODEL = 'register.CustomUser'
 
 TEMPLATES = [
     {

@@ -25,19 +25,21 @@ class RegistrationAPIView(APIView):
     def create(self, request, *args, **kwargs):
         serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        new_user = authenticate(email=request.POST.get('email'),
-                                password=request.POST.get('password')
-                                )
-        login(request, new_user)
-        print('login successful')
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def post(self, request, format=None):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
+        data = request.data
+        email = data.get('email')
+        password = data.get('password')
+        #headers = self.get_success_headers(serializer.data)
+        new_user = authenticate(email=email, password=password)
+        login(request, new_user)
+        print('login successful')
         return Response(
             {
                 'success': True,
