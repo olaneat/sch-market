@@ -25,7 +25,6 @@ class RegistrationAPIView(APIView):
     def create(self, request, *args, **kwargs):
         serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -37,9 +36,10 @@ class RegistrationAPIView(APIView):
         email = data.get('email')
         password = data.get('password')
         #headers = self.get_success_headers(serializer.data)
-        new_user = authenticate(email=email, password=password)
-        login(request, new_user)
-        print('login successful')
+        #new_user = authenticate(email=email, password=password)
+        # if new_user.is_active:
+        #login(request, new_user)
+        #   print('login successful')
         return Response(
             {
                 'success': True,

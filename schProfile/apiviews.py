@@ -13,7 +13,7 @@ class CreateProfileView(generics.CreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
     serializer_class = schoolProfileSerializer
     queryset = Profile.objects.all()
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [permissions.IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(
@@ -25,6 +25,7 @@ class CreateProfileView(generics.CreateAPIView):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
+        print('profile created successfully')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
