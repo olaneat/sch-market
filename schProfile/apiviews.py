@@ -48,14 +48,14 @@ class CreateProfileView(generics.CreateAPIView):
   '''
 
 
-class DisplaySchoolList(generics.ListAPIView):
+class DisplaySchoolList(APIView):
     serializer_class = schoolProfileSerializer
     queryset = Profile.objects.all()
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
 class DispaySchoolDetail(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    permission_classes = [permissions.IsAuthenticated]
     serializer_class = schoolProfileSerializer
     queryset = Profile.objects.all()
 

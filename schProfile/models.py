@@ -8,8 +8,7 @@ import uuid
 
 
 class Profile(models.Model):
-    id = models.UUIDField(
-        primary_key=True, default=uuid.uuid4, unique=True, editable=False)
+
     user = models.OneToOneField(
         CustomUser, related_name='profile', on_delete=models.CASCADE)
     school_name = models.CharField(max_length=255)
