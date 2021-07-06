@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.conf import settings
+from django.db.models.fields import UUIDField
 import jwt
 import uuid
 from datetime import timedelta, datetime
@@ -53,7 +54,8 @@ class CustomManager(BaseUserManager):
 
 
 class CustomUser(AbstractUser):
-    
+    id = models.UUIDField(primary_key=True,
+                          editable=False, default=uuid.uuid4)
     email = models.EmailField(_('email address'), unique=True)
     username = models.CharField(max_length=255, unique=True, db_index=True)
     password = models.CharField(max_length=100)

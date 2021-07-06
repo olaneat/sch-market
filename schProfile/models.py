@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from .constants import Gender, Type, Level
 from register.models import CustomUser
 import uuid
+from django.contrib.contenttypes.fields import GenericRelation
 # Create your models here.
 
 
@@ -12,21 +13,22 @@ class Profile(models.Model):
     user = models.OneToOneField(
         CustomUser, related_name='profile', on_delete=models.CASCADE)
     school_name = models.CharField(max_length=255)
-    address = models.TextField()
-    badge = models.ImageField(upload_to="assets/badge", blank=True, null=True)
+    school_address = models.TextField()
+    school_badge = models.ImageField(
+        upload_to="assets/badge", blank=True, null=True)
     school_type = models.CharField(max_length=50, choices=Type)
-    gender = models.CharField(max_length=20, choices=Gender)
-    level = models.CharField(max_length=40, choices=Level)
-    state = models.CharField(max_length=100)
+    school_gender = models.CharField(max_length=20, choices=Gender)
+    school_level = models.CharField(max_length=40, choices=Level)
+    school_state = models.CharField(max_length=100)
     date_established = models.DateField(blank=True, null=True)
-    curriculum = models.CharField(max_length=255)
+    school_curriculum = models.CharField(max_length=255)
     school_fees_range = models.CharField(max_length=255)
     extra_curriculum_activities = models.TextField()
     school_phone_number = models.CharField(max_length=25)
     school_email = models.EmailField()
-    motto = models.CharField(max_length=255)
-    website = models.URLField(blank=True, null=True)
-    clubs = models.TextField()
+    school_motto = models.CharField(max_length=255)
+    school_website = models.URLField(blank=True, null=True)
+    school_clubs = models.TextField()
     school_facilities = models.TextField()
     awards_won = models.TextField()
     created = models.DateTimeField(auto_now=True)

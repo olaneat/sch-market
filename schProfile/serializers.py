@@ -50,15 +50,15 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "school_name",
-            "address",
-            "badge",
-            "gender",
-            "level",
-            "state",
-            "curriculum",
+            "school_address",
+            "school_badge",
+            "school_gender",
+            "school_level",
+            "school_state",
+            "school_curriculum",
             "extra_curriculum_activities",
-            "website",
-            "clubs",
+            "school_website",
+            "school_clubs",
             "school_phone_number",
             "school_type",
             "school_email",
@@ -66,7 +66,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             "awards_won",
             "date_established",
             "school_fees_range",
-            "motto"
+            "school_motto"
         )
 
         def create(self, validated_data, instance=None):
