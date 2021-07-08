@@ -133,3 +133,4 @@ class CreatePasswordSerializer(serializers.Serializer):
             user.save()
             return user
         except Exception as e:
+            print(e)

@@ -5,6 +5,6 @@ app_name = 'profile'
 urlpatterns = [
     path('create', CreateProfileView.as_view(), name='create-profile'),
     path('list', DisplaySchoolList.as_view(), name='school-list'),
-    path('detail/<int:pk>/', DispaySchoolDetail.as_view(), name='detail'),
+    path('detail/<str:pk>/', DispaySchoolDetail.as_view(), name='detail'),
     path('update', UpdateSchoolProfile.as_view(), name="update-profile")
 ]

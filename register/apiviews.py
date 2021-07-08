@@ -8,7 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
 from django.contrib.auth import authenticate, login
-from .serializers import RegistrationSerializer, CreatePasswordSerializer, LoginSerializer, changePasswordSerializer, RequestNewPasswordSerializer
+from .serializers import RegistrationSerializer, CreatePasswordSerializer, LoginSerializer, RequestNewPasswordSerializer
 from register.models import CustomUser
 from . import permissions
 from register import serializers
@@ -48,17 +48,14 @@ class RegistrationAPIView(APIView):
         # if new_user.is_active:
         #login(request, new_user)
         #print('login successful')
-        return Response(
-            {
-                'success': True,
-                'status_code': status.HTTP_201_CREATED,
-                'username': serializer.data.get('username', None),
-                'email': serializer.data.get('email', None),
-                'id': serializer.data.get('id', None)
-
-            },
-            status=status.HTTP_201_CREATED,
-        )
+        response = {
+            'success': True,
+            'message': "signup successful, proceed to login",
+            'status_code': status.HTTP_201_CREATED,
+            'username': serializer.data.get('username', None),
+            'email': serializer.data.get('email', None),
+        }
+        return Response(response)
 
 
 class LoginAPIView(RetrieveAPIView):
@@ -91,7 +88,7 @@ class LoginAPIView(RetrieveAPIView):
 
 
 class changePasswordAPIView(generics.UpdateAPIView):
-    serializer_class = changePasswordSerializer
+    serializer_class = CreatePasswordSerializer
     models = CustomUser
     permissions = (IsAuthenticated)
 
@@ -105,24 +102,26 @@ class changePasswordAPIView(generics.UpdateAPIView):
 
         if serializer.is_valid():
             if not self.object.check_password(serializer.data.get('old_password')):
-                return Response({"old Password":["Invalid Password"]}, status=status.HTTP_404_BAD_REQUEST)
+                return Response({"old Password": ["Invalid Password"]}, status=status.HTTP_404_BAD_REQUEST)
             self.object.set_password(self.serializer.data.get("new_password"))
             self.object.save()
-            response ={
+            response = {
                 'message': 'Password Successfully Changed',
                 'code': status.HTTP_201_OK,
                 'status': 'Success',
                 'data': [],
-            } 
+            }
 
             return Response(response)
-        
+
         return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
 
-class RequestPasswordResetAPIView(generics.GenericsAPIView):
+
+class RequestPasswordResetAPIView(generics.GenericAPIView):
     serializers_class = RequestNewPasswordSerializer
 
     def post(self, request):
+        serializer = serializers.serializers_class(data=request.data)
         email = request.data['email']
         if CustomUser.objects.filter(email=email).exists():
             user = CustomUser.objects.get(email=email)
@@ -139,26 +138,26 @@ class RequestPasswordResetAPIView(generics.GenericsAPIView):
                 "subject": "Password Reset Link"
             }
             Utils.send_mail(data)
-        return super().validate(attrs)
+        # return super().validate(attrs)
 
 
-class PasswordTokenAPIView(generics.GenericsAPIView):
+class PasswordTokenAPIView(generics.GenericAPIView):
     def get(self, request, uidb64, token):
         try:
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = CustomUser.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
-                return Response({'error':'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
-            return Response({'success': True, 'message':'Done', 'uidb64':uidb64, 'token':token}, status=status.HTTP_200_OK)
+                return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'success': True, 'message': 'Done', 'uidb64': uidb64, 'token': token}, status=status.HTTP_200_OK)
         except DjangoUnicodeDecodeError as identifer:
             if not PasswordResetTokenGenerator().check_token(user):
                 return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-class CreatePasswordAPI(generics.GenericsAPIView):
+class CreatePasswordAPI(generics.GenericAPIView):
     serializers = CreatePasswordSerializer
 
     def patch(self, request):
         serializer = self.serializers_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        return Response({'success':True, 'message':'Password changed Successfully'}, status=status.HTTP_200_OK)
+        return Response({'success': True, 'message': 'Password changed Successfully'}, status=status.HTTP_200_OK)
