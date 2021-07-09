@@ -11,6 +11,7 @@ from register.models import CustomUser
 
 
 class Base64Imagefield(serializers.ImageField):
+
     def to_internal_value(self, data):
         if isinstance(data, six.string_types):
             if 'data:' in data and ';base64,' in data:
@@ -29,55 +30,54 @@ class Base64Imagefield(serializers.ImageField):
     def get_file_extension(self, file_name, decoded_file):
         extension = imghdr.what(file_name, decoded_file)
         extension = 'jpg' if extension == 'jpeg' else extension
+
         return extension
 
 
 class schoolProfileSerializer(serializers.ModelSerializer):
-    ##id = serializers.IntegerField(source='pk', read_only=True)
-    parser_classes = (MultiPartParser, FormParser, )
-    email = serializers.CharField(source='user.email', read_only=True)
-    username = serializers.CharField(source='user.username', read_only=True)
-    badge = Base64Imagefield(max_length=None, use_url=True)
-    date_established = serializers.DateField(format=None, input_formats=None)
+    id = serializers.IntegerField(source="user.id", read_only=True)
+    parser_classes = (
+        MultiPartParser,
+        FormParser,
+    )
+    email = serializers.CharField(source="user.email", read_only=True)
+    username = serializers.CharField(source="user.username", read_only=True)
 
     class Meta:
         model = Profile
-        fields = ('email', 'id', 'username', 'school_name',
-                  'address', 'badge', 'gender', 'level',
-                  'state', 'curriculum', 'extra_curriculum_activities',
-                  'website', 'clubs', 'school_phone_number', 'school_type',
-                  'school_email', 'school_facilities', 'awards_won', 'date_established',
-                  'school_fees_range', 'motto'
-                  )
+        fields = (
+            "email",
+            "id",
+            "username",
+            "school_name",
+            "school_address",
+            "school_badge",
+            "school_gender",
+            "school_level",
+            "school_state",
+            "school_curriculum",
+            "extra_curriculum_activities",
+            "school_website",
+            "school_clubs",
+            "school_phone_number",
+            "school_type",
+            "school_email",
+            "school_facilities",
+            "awards_won",
+            "date_established",
+            "school_fees_range",
+            "school_motto"
+        )
 
-    '''
-    
-  def create(self, validated_data):
-    if 'profile' in validated_data:
-      user_data = validated_data.pop('profile')
-    user = CustomUser.objects._create_user(**validated_data)
-    Profile.objects.update_or_create(user=user, **validated_data)
-    return user
-
-
-    def create(self, validated_data, instance=None):
-    user_data = validated_data.pop('user')
-    user = RegistrationSerializer.create(RegistrationSerializer(), validated_data=user_data)
-    profile, creted = schoolProfileSerializer.update_or_create(user=user, 
-      school_name = validated_data.pop('school_name'),
-      address = validated_data.pop('address'),
-      state = validated_data.pop('state'),
-      school_fees_range = validated_data.pop('school_fees_range'),
-      motto = validated_data.pop('motto'),
-      school_facilities = validated_data.pop('school_facilities'),
-      awards_won = validated_data.pop('awards_won'),
-      date_established = validated_data.pop('date_esablished'),
-      school_type=validated_data.pop("school_type") 
-
-    )
-    
-  
-  '''
+        def create(self, validated_data, instance=None):
+            if "user" in validated_data:
+                user = validated_data.pop("user")
+            else:
+                user = CustomUser.objects.create(**validated_data)
+            profile, create_profile = Profile.objects.update_or_create(
+                user=user, defaults=validated_data
+            )
+            return profile
 
 
 def get_username(self, obj):
