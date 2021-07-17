@@ -10,9 +10,13 @@ from .serializers import schoolProfileSerializer
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 
 
-class DynamicFilter(filters.SearchFilter):
-    def get_search_fields(self, view, request):
-        return request.GET.getlist('search_fields', [])
+'''
+    class CustomSearchFilter(filters.SearchFilter):
+        def get_search_fields(self, view, request):
+            if request.query_params.get('title_only'):
+                return ['title']
+            return super(CustomSearchFilter, self).get_search_fields(view, request)
+'''
 
 
 class CreateProfileView(generics.CreateAPIView):
@@ -55,10 +59,16 @@ class CreateProfileView(generics.CreateAPIView):
 
 
 class DisplaySchoolList(generics.ListAPIView):
-    filter_backends = (DynamicFilter,)
-    serializer_class = schoolProfileSerializer
+    filter_backends = (filters.SearchFilter)
     queryset = Profile.objects.exclude(school_name='')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    serializer_class = schoolProfileSerializer
+
+    '''
+        search_fields = ['school_name', 'school_state',
+                     'school_address', 'school_fees_range']
+        #filter_backends = (filters.SearchFilter,)
+    '''
 
 
 class DispaySchoolDetail(generics.RetrieveAPIView):
@@ -88,4 +98,4 @@ class UpdateSchoolProfile(generics.UpdateAPIView):
 class DeleteSchoolProfile(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = schoolProfileSerializer
-    queryset = Profile.objects.filter(id=id)
+    queryset = Profile.objects.all()
