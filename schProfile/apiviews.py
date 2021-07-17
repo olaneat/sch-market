@@ -4,9 +4,15 @@ from rest_framework import permissions
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework import filters
 from .models import Profile
 from .serializers import schoolProfileSerializer
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+
+
+class DynamicFilter(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return request.GET.getlist('search_fields', [])
 
 
 class CreateProfileView(generics.CreateAPIView):
@@ -49,8 +55,9 @@ class CreateProfileView(generics.CreateAPIView):
 
 
 class DisplaySchoolList(generics.ListAPIView):
+    filter_backends = (DynamicFilter,)
     serializer_class = schoolProfileSerializer
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.exclude(school_name='')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
 
@@ -81,4 +88,4 @@ class UpdateSchoolProfile(generics.UpdateAPIView):
 class DeleteSchoolProfile(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = schoolProfileSerializer
-    queryset = Profile.objects.all()
+    queryset = Profile.objects.filter(id=id)
