@@ -59,7 +59,7 @@ class CreateProfileView(generics.CreateAPIView):
 
 
 class DisplaySchoolList(generics.ListAPIView):
-    filter_backends = (filters.SearchFilter)
+    filter_backends = (filters.SearchFilter,)
     queryset = Profile.objects.exclude(school_name='')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = schoolProfileSerializer
@@ -72,7 +72,7 @@ class DisplaySchoolList(generics.ListAPIView):
 
 
 class DispaySchoolDetail(generics.RetrieveAPIView):
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = schoolProfileSerializer
     queryset = Profile.objects.all()
 
