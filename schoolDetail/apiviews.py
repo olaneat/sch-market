@@ -87,8 +87,22 @@ class CreatePrincipalDetailView(generics.CreateAPIView):
     queryset = PrincipalDetails.objects.all()
     permission_classes = [permissions.IsAuthenticated]
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data, instance=request.user.profile.principal_detail
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            message='Principal Data Successfully save'
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+            headers=headers
+        )
+
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        serializer.save(user=self.request.user.profile)
 
 
 class DisplayPrincipalDetialView(generics.RetrieveAPIView):

@@ -88,7 +88,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
                 user = validated_data.pop("user")
             else:
                 user = CustomUser.objects.create(**validated_data)
-            profile, create_profile = Profile.objects.update_or_create(
+            profile = Profile.objects.update_or_create(
                 user=user, defaults=validated_data
             )
             return profile

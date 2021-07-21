@@ -51,11 +51,11 @@ class PricipalDetailSerialiazer(serializers.ModelSerializer):
                   'post_held', 'display_image')
 
         def create(self, validated_data, instance=None):
-            if 'user' in validated_data:
-                user = validated_data.pop('user')
+            if 'user.profile' in validated_data:
+                user = validated_data.pop('user.profile')
             else:
                 user = Profile.objects.create(**validated_data)
-            principal_detail = Profile.objects.update_or_create(
+            principal_detail = PrincipalDetails.objects.update_or_create(
                 user=user, defaults=validated_data
             )
             return principal_detail
