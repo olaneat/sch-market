@@ -35,7 +35,6 @@ class CreateProfileView(generics.CreateAPIView):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
-        print('profile created successfully')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)

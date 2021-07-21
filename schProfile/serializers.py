@@ -1,3 +1,4 @@
+from django.db import models
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
 from rest_framework import serializers
 from django.core.files.base import ContentFile
@@ -7,6 +8,7 @@ import base64
 import six
 import uuid
 from .models import Profile
+from schoolDetail.serializers import PricipalDetailSerialiazer, EnquirySerialiazer, GallerySerializer, ReviewSerializer, VideoSerializer, AdmissionFormSerializer
 from register.models import CustomUser
 
 
@@ -42,6 +44,12 @@ class schoolProfileSerializer(serializers.ModelSerializer):
     )
     email = serializers.CharField(source="user.email", read_only=True)
     username = serializers.CharField(source="user.username", read_only=True)
+    principal_detail = PricipalDetailSerialiazer(required=False)
+    school_gallery = GallerySerializer(many=True, required=False)
+    intro_video = VideoSerializer(many=True, required=False)
+    enquiry = EnquirySerialiazer(many=True, required=False)
+    review = ReviewSerializer(many=True, required=False)
+    admission_form = AdmissionFormSerializer(many=True, required=False)
 
     class Meta:
         model = Profile
@@ -50,6 +58,12 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             "id",
             "username",
             "school_name",
+            'admission_form',
+            'enquiry',
+            'principal_detail',
+            'school_gallery',
+            'intro_video',
+            'review',
             "school_address",
             "school_badge",
             "school_gender",

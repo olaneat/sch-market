@@ -1,5 +1,5 @@
 from django.urls import path
-from .apiviews import DisplayGalleryApi, GalleryApi, CreateAdmissionLetter, DisplayAdmissionLetter, DisplayVideo, SchoolVideoAPi
+from .apiviews import DisplayGalleryApi, GalleryApi, RetrieveAdmissionForm, DisplayVideo, SchoolVideoAPi, DisplayPrincipalDetialView, CreatePrincipalDetailView
 
 app_name = 'sch-detail'
 urlpatterns = [
@@ -7,6 +7,10 @@ urlpatterns = [
     path('display-gallery', DisplayGalleryApi.as_view(), name='display-gallery'),
     path('create-video', SchoolVideoAPi.as_view(), name="create-video"),
     path('display-video', DisplayVideo.as_view(), name='display-video'),
-    path('create-admission-letter', CreateAdmissionLetter.as_view(), name="addmission-letter"),
-    path('display-addmission', DisplayAdmissionLetter.as_view(), name='display-admission-letter'),
+    path('create-principal-detail', CreatePrincipalDetailView.as_view(),
+         name="create-principal-detail"),
+    path('display_principal_detail', DisplayPrincipalDetialView.as_view(),
+         name='display_prinicipa_detail'),
+    path('display-addmission', RetrieveAdmissionForm.as_view(),
+         name='display-admission-letter'),
 ]
