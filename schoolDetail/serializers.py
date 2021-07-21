@@ -29,7 +29,17 @@ class VideoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SchoolVideo
-        fields = ('intro_video')
+        fields = ('school', 'intro_video')
+
+        def create(self, validated_data, *args, **kwargs):
+            if 'user' in validated_data:
+                user = validated_data.pop('user')
+            else:
+                user = Profile.objects.create(**validated_data)
+            school_video = SchoolVideo.objects.update_or_create(
+                user=user, defaults=validated_data
+            )
+            return school_video
 
 
 class ReviewSerializer(serializers.ModelSerializer):

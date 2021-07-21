@@ -59,15 +59,35 @@ class SchoolVideoAPi(generics.CreateAPIView):
     serializer_class = VideoSerializer
     queryset = SchoolVideo.objects.all()
     permission_class = [permissions.IsAuthenticated]
-    parser_classes = (FileUploadParser)
+    parser_classes = (MultiPartParser, FormParser)
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data, instance=request.user.profile.school_video
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data,
+            message='Video successfully Uploaded',
+            status=status.HTTPS_201_CREATED,
+            headers=headers,
+        )
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user.profile.school_video)
+
+    '''
+    
+         def post(self, request, *args, **kwargs):
         video = VideoSerializer(data=request.data)
         if video.is_valid():
             video.save()
             return Response(video.data, status=status.HTTP_201_CREATED)
         else:
             return Response(video.errors, status=status.HTTP_400_BAD_REQUEST)
+    '''
 
 
 class DisplayVideo(generics.ListAPIView):
@@ -95,8 +115,8 @@ class CreatePrincipalDetailView(generics.CreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(
-            message='Principal Data Successfully save'
             serializer.data,
+            message='Principal Data Successfully save',
             status=status.HTTP_201_CREATED,
             headers=headers
         )
