@@ -30,6 +30,7 @@ class Profile(models.Model):
     school_website = models.URLField(blank=True, null=True)
     school_clubs = models.TextField()
     school_facilities = models.TextField()
+    competitive_advantage = models.TextField(blank=True, null=True)
     awards_won = models.TextField()
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)

@@ -57,6 +57,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             "email",
             "id",
             "username",
+            'competitive_advantage',
             "school_name",
             'admission_form',
             'enquiry',
