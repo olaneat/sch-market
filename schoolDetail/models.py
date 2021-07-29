@@ -24,7 +24,7 @@ class Gallery(models.Model):
         ordering = ('-school',)
 
     def __str__(self):
-        return self.school.username
+        return self.school.school_name
 
 
 class SchoolVideo(models.Model):
@@ -33,11 +33,21 @@ class SchoolVideo(models.Model):
     intro_video = models.FileField(
         upload_to='assets/videos', blank=True, null=True)
 
+    ''' 
     class Meta:
         ordering = ('-school',)
-
+    '''
     def __str__(self):
         return self.school.username
+@receiver(post_save, sender=Profile)
+def create_school_video(sender, instance, created, **kwargs):
+    if created:
+        school_video = SchoolVideo.objects.create(user=instance)
+
+
+@receiver(post_save, sender=Profile)
+def save_principal_detail(sender, instance, **kwargs):
+    instance.school_video.save()
 
 
 class PrincipalDetails(models.Model):

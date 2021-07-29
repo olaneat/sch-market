@@ -36,7 +36,7 @@ class CreateProfileView(generics.CreateAPIView):
             serializer.data,
             status=status.HTTP_201_CREATED,
             headers=headers
-           
+
         )
 
     def perform_create(self, serializer):
@@ -92,9 +92,14 @@ class UpdateSchoolProfile(generics.UpdateAPIView):
         badge = schoolProfileSerializer(data=request.data)
         if badge.is_valid():
             badge.save()
-            return Response(badge.data, status=status.HTTP_200_OK)
+            response = {
+                'message': 'Profile successfully created',
+                'status': status.HTTP_200_OK,
+                'success': True
+            }
+            return Response(badge.data, response)
         else:
-            return Response(badge.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(badge.errors,  status=status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteSchoolProfile(generics.DestroyAPIView):

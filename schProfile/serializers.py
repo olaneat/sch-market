@@ -46,7 +46,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username", read_only=True)
     principal_detail = PricipalDetailSerialiazer(required=False)
     school_gallery = GallerySerializer(many=True, required=False)
-    school_video = VideoSerializer(many=True, required=False)
+    school_video = serializers.StringRelatedField(many=True)
     enquiry = EnquirySerialiazer(many=True, required=False)
     review = ReviewSerializer(many=True, required=False)
     admission_form = AdmissionFormSerializer(many=True, required=False)

@@ -12,17 +12,38 @@ from rest_framework import permissions
 
 class GalleryApi(generics.CreateAPIView):
     serializer_class = GallerySerializer
-    queryset = Gallery.objects.all()
     permission_classes = [permissions.IsAuthenticated]
-    parser_classes = (FileUploadParser)
+    parser_classes = (MultiPartParser, FormParser)
 
-    def post(self, request, *args, **kwargs):
-        file_serializer = GallerySerializer(data=request.data)
-        if file_serializer.is_valid():
-            file_serializer.save()
-            return Response(file_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(file_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def get_queryset(self):
+        id = self.request.user.id
+        return Gallery.objects.filter(id=id)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data, instance=self.request.user.profile.gallery.filter(
+                id=self.request.user.id).first()
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(data=request.data)
+        response = {
+            'message': 'Gallery successfully Created',
+            'status': status.HTTP_201_CREATED,
+            'headers': headers,
+            'success': True
+        }
+
+        return Response(response)
+
+    def perform_create(self, serializer):
+        serializer.save()
+
+    '''    
+
+        def perform_create(self, serializer):
+            serializer.save()
+    '''
 
 
 class DisplayGalleryApi(generics.ListAPIView):
@@ -37,13 +58,36 @@ class CreateAdmissionForm(generics.CreateAPIView):
     permissions_classes = (permissions.IsAuthenticated)
     parser_classes = (FileUploadParser)
 
-    def post(self, request, *args, **kwargs):
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data, instance=request.user.profile.admission_form.filter(
+                id=self.request.user.id)
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(data=request.data)
+        response = {
+            'message': 'Gallery successfully Created',
+            'status': status.HTTP_201_CREATED,
+            'headers': headers,
+            'success': True
+        }
+
+        return Response(response)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user.profile)
+    '''
+
+         def post(self, request, *args, **kwargs):
         file = AdmissionFormSerializer(data=request.data)
         if file.is_valid():
             file.save()
             return Response(file.data, status=status.HTTP_201_CREATED)
         else:
             return Response(file.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    '''
 
 
 class RetrieveAdmissionForm(generics.RetrieveAPIView):
@@ -57,13 +101,17 @@ class RetrieveAdmissionForm(generics.RetrieveAPIView):
 
 class SchoolVideoAPi(generics.CreateAPIView):
     serializer_class = VideoSerializer
-    queryset = SchoolVideo.objects.all()
     permission_class = [permissions.IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
 
+    def get_queryset(self, serializer):
+        id = self.request.user.profile.school_id
+        queryset = SchoolVideo.objects.filter(id=id)
+        return queryset
+
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(
-            data=request.data, instance=request.user.profile.school_video
+            data=request.data, instance=request.user.profile.school_video.first()
         )
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -76,7 +124,9 @@ class SchoolVideoAPi(generics.CreateAPIView):
         )
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user.profile.school_video)
+        print(self.request.user.profile)
+        serializer.save(user=self.request.user.profile)
+        # serializer.save(user=self.request.user.profile)
 
     '''
     
@@ -114,12 +164,15 @@ class CreatePrincipalDetailView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data,
-            message='Principal Data Successfully save',
-            status=status.HTTP_201_CREATED,
-            headers=headers
-        )
+        response = {
+            'data': serializer.data,
+            'message': 'Principal Data Successfully save',
+            status: status.HTTP_201_CREATED,
+            'headers': headers
+
+        }
+
+        return Response(response)
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user.profile)
@@ -132,4 +185,13 @@ class DisplayPrincipalDetialView(generics.RetrieveAPIView):
     def get_querryset(self):
         queryset = PrincipalDetails.objects.filter(
             id=self.request.GET.get('user.id'))
+        return queryset
+
+
+class EnquiryView(generics.CreateAPIView):
+    serializer_class = EnquirySerialiazer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        queryset = Enquiry.objects.filter(id=self.GET.get('user.id'))
         return queryset

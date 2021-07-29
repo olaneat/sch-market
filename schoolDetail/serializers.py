@@ -6,12 +6,22 @@ from schProfile.models import Profile
 
 
 class GallerySerializer(serializers.ModelSerializer):
-    school = serializers.CharField(
-        source='gallery.school_name', read_only=True)
+    #school = serializers.CharField(source='admission.school_name', read_only=True)
+    #school = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = Gallery
-        fields = ('picture')
+        fields = ('picture',)
+
+    def create(self, validated_data, instance=None):
+        if 'user.profile' in validated_data:
+            user = validated_data.pop('user.profile')
+        else:
+            user = Profile.objects.create(**validated_data)
+        school_video = Gallery.objects.update_or_create(
+            user=user, defaults=validated_data
+        )
+        return school_video
 
 
 class AdmissionFormSerializer(serializers.ModelSerializer):
@@ -20,20 +30,20 @@ class AdmissionFormSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Admission
-        fields = ('admission_form')
+        fields = ('admission_form', 'school')
 
 
 class VideoSerializer(serializers.ModelSerializer):
-    school = serializers.CharField(
-        source="school_video.school_name", read_only=True)
+    school = serializers.HiddenField(
+        default=serializers.CurrentUserDefault())
 
     class Meta:
         model = SchoolVideo
-        fields = ('school', 'intro_video')
+        fields = ('intro_video', 'school')
 
-        def create(self, validated_data, *args, **kwargs):
-            if 'user' in validated_data:
-                user = validated_data.pop('user')
+        def create(self, validated_data, instance=None):
+            if 'user.profile' in validated_data:
+                user = validated_data.pop('user.profile')
             else:
                 user = Profile.objects.create(**validated_data)
             school_video = SchoolVideo.objects.update_or_create(
