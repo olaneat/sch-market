@@ -53,12 +53,9 @@ class VideoSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    school = serializers.CharField(
-        source="review.school_name", read_only=True)
-
     class Meta:
         model = Review
-        fields = ('title', 'review', 'reviewer_email')
+        fields = ('name', 'review', 'reviewer_email', 'rating')
 
 
 class PricipalDetailSerialiazer(serializers.ModelSerializer):
@@ -82,9 +79,7 @@ class PricipalDetailSerialiazer(serializers.ModelSerializer):
 
 
 class EnquirySerialiazer(serializers.ModelSerializer):
-    school = serializers.CharField(
-        source="enquiry.school_name", read_only=True)
 
     class Meta:
         model = Enquiry
-        fields = ('title', 'sender_email', 'enquiry')
+        fields = ('title', 'school', 'sender_email', 'enquiry')

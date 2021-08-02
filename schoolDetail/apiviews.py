@@ -195,3 +195,22 @@ class EnquiryView(generics.CreateAPIView):
     def get_queryset(self):
         queryset = Enquiry.objects.filter(id=self.GET.get('user.id'))
         return queryset
+
+
+class ReviewAPIView(generics.CreateAPIView):
+    serializer_class = ReviewSerializer
+    permissions = [permissions.AllowAny]
+
+    def get_queryset(self, serializer):
+        querset = Review.objects.filter(id=self.GET.get('user.id'))
+        return querset
+
+
+class DisplayReview(generics.RetrieveAPIView):
+    serializer_class = ReviewSerializer
+    permissions = [permissions.IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        user_id = self.request.user.id
+        queryset = Review.objects.filter(id=user_id)
+        return queryset
