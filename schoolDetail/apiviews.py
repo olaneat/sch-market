@@ -16,34 +16,27 @@ class GalleryApi(generics.CreateAPIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def get_queryset(self):
-        id = self.request.user.id
-        return Gallery.objects.filter(id=id)
+        profile = self.request.user.profile
+        queryset = Gallery.objects.filter(user=profile)
+        return queryset
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(
-            data=request.data, instance=self.request.user.profile.gallery.filter(
-                id=self.request.user.id).first()
+            data=request.data, instance=request.user.profile.gallery.first()
         )
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        headers = self.get_success_headers(data=request.data)
-        response = {
-            'message': 'Gallery successfully Created',
+        headers = self.get_success_headers(serializer.data)
+        res = {
+            'message': 'Pictures successfully Uploaded',
             'status': status.HTTP_201_CREATED,
             'headers': headers,
-            'success': True
+            'serializer': serializer.data
         }
-
-        return Response(response)
+        return Response(res)
 
     def perform_create(self, serializer):
-        serializer.save()
-
-    '''    
-
-        def perform_create(self, serializer):
-            serializer.save()
-    '''
+        serializer.save(school=self.request.user.profile)
 
 
 class DisplayGalleryApi(generics.ListAPIView):
@@ -76,7 +69,7 @@ class CreateAdmissionForm(generics.CreateAPIView):
         return Response(response)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user.profile)
+        serializer.save(school=self.request.user.profile)
     '''
 
          def post(self, request, *args, **kwargs):
@@ -116,28 +109,17 @@ class SchoolVideoAPi(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data,
-            message='Video successfully Uploaded',
-            status=status.HTTPS_201_CREATED,
-            headers=headers,
-        )
+        res = {
+            'message': 'Video successfully Uploaded',
+            'status': status.HTTP_201_CREATED,
+            'headers': headers,
+            'serializer': serializer.data
+        }
+        return Response(res)
 
     def perform_create(self, serializer):
-        print(self.request.user.profile)
-        serializer.save(user=self.request.user.profile)
+        serializer.save(school=self.request.user.profile)
         # serializer.save(user=self.request.user.profile)
-
-    '''
-    
-         def post(self, request, *args, **kwargs):
-        video = VideoSerializer(data=request.data)
-        if video.is_valid():
-            video.save()
-            return Response(video.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(video.errors, status=status.HTTP_400_BAD_REQUEST)
-    '''
 
 
 class DisplayVideo(generics.ListAPIView):
@@ -146,8 +128,8 @@ class DisplayVideo(generics.ListAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
-        queryset = VideoSerializer.objects.filter(
-            id=self.request.GET.get('user.id'))
+        id = self.request.user.id
+        queryset = VideoSerializer.objects.filter(id=id)
         return queryset
 
 
@@ -204,6 +186,23 @@ class ReviewAPIView(generics.CreateAPIView):
     def get_queryset(self, serializer):
         querset = Review.objects.filter(id=self.GET.get('user.id'))
         return querset
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data, instance=request.user.profile.review.first()
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        res = {
+            'message': 'review has been successfully Submitted',
+            'status': status.HTTP_201_CREATED,
+            'serializer': serializer.data
+        }
+        return Response(res)
+
+    def perform_create(self, serializer):
+        serializer.save(school=self.request.user.profile)
 
 
 class DisplayReview(generics.RetrieveAPIView):

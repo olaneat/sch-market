@@ -1,7 +1,35 @@
+from register.models import CustomUser
 from django.db import models
 from schProfile.models import Profile
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+
+class PrincipalDetails(models.Model):
+    user = models.OneToOneField(
+        Profile, related_name='principal_detail', on_delete=models.CASCADE)
+    principal_name = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    display_image = models.FileField(
+        upload_to='assests/principal')
+    post_held = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ('-principal_name',)
+
+    def __str__(self):
+        return self.principal_name
+
+
+@receiver(post_save, sender=Profile)
+def create_principal_detail(sender, instance, created, **kwargs):
+    if created:
+        principal_detail = PrincipalDetails.objects.create(user=instance)
+
+
+@receiver(post_save, sender=Profile)
+def save_principal_detail(sender, instance, **kwargs):
+    instance.principal_detail.save()
 
 
 class Admission(models.Model):
@@ -39,45 +67,7 @@ class SchoolVideo(models.Model):
     '''
 
     def __str__(self):
-        return self.school.username
-
-
-@receiver(post_save, sender=Profile)
-def create_school_video(sender, instance, created, **kwargs):
-    if created:
-        school_video = SchoolVideo.objects.create(user=instance)
-
-
-@receiver(post_save, sender=Profile)
-def save_principal_detail(sender, instance, **kwargs):
-    instance.school_video.save()
-
-
-class PrincipalDetails(models.Model):
-    user = models.OneToOneField(
-        Profile, related_name='principal_detail', on_delete=models.CASCADE)
-    principal_name = models.CharField(max_length=255)
-    phone_number = models.CharField(max_length=255)
-    display_image = models.FileField(
-        upload_to='assests/principal')
-    post_held = models.CharField(max_length=255)
-
-    class Meta:
-        ordering = ('-principal_name',)
-
-    def __str__(self):
-        return self.principal_name
-
-
-@receiver(post_save, sender=Profile)
-def create_principal_detail(sender, instance, created, **kwargs):
-    if created:
-        principal_detail = PrincipalDetails.objects.create(user=instance)
-
-
-@receiver(post_save, sender=Profile)
-def save_principal_detail(sender, instance, **kwargs):
-    instance.principal_detail.save()
+        return self.school.school_name
 
 
 class Enquiry(models.Model):

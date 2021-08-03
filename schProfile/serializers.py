@@ -1,5 +1,6 @@
 from django.db import models
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+from schoolDetail.models import Gallery
 from rest_framework import serializers
 from django.core.files.base import ContentFile
 from django.conf import settings
@@ -45,7 +46,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
     email = serializers.CharField(source="user.email", read_only=True)
     username = serializers.CharField(source="user.username", read_only=True)
     principal_detail = PricipalDetailSerialiazer(required=False)
-    school_gallery = GallerySerializer(many=True, read_only=True)
+    gallery = GallerySerializer(many=True, read_only=True)
     school_video = serializers.StringRelatedField(many=True, read_only=True)
     review = ReviewSerializer(many=True, read_only=True)
     admission_form = AdmissionFormSerializer(many=True, read_only=True)
@@ -60,7 +61,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             "school_name",
             'admission_form',
             'principal_detail',
-            'school_gallery',
+            'gallery',
             'school_video',
             'review',
             "school_address",
@@ -82,15 +83,16 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             "school_motto"
         )
 
-        def create(self, validated_data, instance=None):
-            if "user" in validated_data:
-                user = validated_data.pop("user")
-            else:
-                user = CustomUser.objects.create(**validated_data)
-            profile = Profile.objects.update_or_create(
-                user=user, defaults=validated_data
-            )
-            return profile
+    def create(self, validated_data, instance=None):
+        if "user" in validated_data:
+            user = validated_data.pop("user")
+        else:
+            user = CustomUser.objects.create(**validated_data)
+        gallery = validated_data.pop('school_gallery')
+        profile = Profile.objects.update_or_create(
+            user=user, defaults=validated_data
+        )
+        return profile
 
 
 def get_username(self, obj):

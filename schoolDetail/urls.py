@@ -1,5 +1,5 @@
 from django.urls import path
-from .apiviews import DisplayGalleryApi, GalleryApi, RetrieveAdmissionForm, EnquiryView, DisplayVideo, SchoolVideoAPi, DisplayPrincipalDetialView, ReviewAPIView, DisplayReview, CreatePrincipalDetailView
+from .apiviews import DisplayGalleryApi, GalleryApi,  RetrieveAdmissionForm, EnquiryView, DisplayVideo, SchoolVideoAPi, DisplayPrincipalDetialView, ReviewAPIView, DisplayReview, CreatePrincipalDetailView
 
 app_name = 'sch-detail'
 urlpatterns = [
