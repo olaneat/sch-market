@@ -1,3 +1,4 @@
+from os import stat
 from django.db.models import query
 from rest_framework import generics
 from .serializers import GallerySerializer, AdmissionFormSerializer, VideoSerializer, ReviewSerializer, PricipalDetailSerialiazer, EnquirySerialiazer
@@ -5,7 +6,10 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from rest_framework import status
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
-
+import sendgrid
+from sendgrid.helpers.mail import (Mail, Email, Personalization)
+from python_http_client import exceptions
+#from twilio_sendgrid_integration.settings import DEFAULT_FROM_EMAIL, SENDGRID_API_KEY
 from .models import Gallery, Admission, SchoolVideo, Enquiry, PrincipalDetails, Review
 from rest_framework import permissions
 
@@ -160,11 +164,31 @@ class CreatePrincipalDetailView(generics.CreateAPIView):
         serializer.save(user=self.request.user.profile)
 
 
+class updatePrincipalDetail(generics.UpdateAPIView):
+    serializer_class = PricipalDetailSerialiazer
+    parser_classes = (MultiPartParser, FormParser)
+    queryset = PrincipalDetails.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request):
+        display_image = PricipalDetailSerialiazer(data=request.data)
+        if display_image.is_valid():
+            display_image.save()
+            response = {
+                'message': 'Details successfully Updated',
+                'status': status.HTTP_200_OK,
+                'success': 'Ok'
+            }
+            return Response(response, display_image.data)
+        else:
+            return Response(display_image.errors)
+
+
 class DisplayPrincipalDetialView(generics.RetrieveAPIView):
     serializer_class = PrincipalDetails
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-    def get_querryset(self):
+    def get_queryset(self):
         queryset = PrincipalDetails.objects.filter(
             id=self.request.GET.get('user.id'))
         return queryset
@@ -182,14 +206,11 @@ class EnquiryView(generics.CreateAPIView):
 class ReviewAPIView(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permissions = [permissions.AllowAny]
-
-    def get_queryset(self, serializer):
-        querset = Review.objects.filter(id=self.GET.get('user.id'))
-        return querset
+    queryset = Review.objects.all()
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(
-            data=request.data, instance=request.user.profile.review.first()
+            data=request.data
         )
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
@@ -202,14 +223,44 @@ class ReviewAPIView(generics.CreateAPIView):
         return Response(res)
 
     def perform_create(self, serializer):
-        serializer.save(school=self.request.user.profile)
+        id = self.request
+        print(self.request.user.profile)
+        serializer.save(school=self.request.user)
+
+    '''
+    def get_queyset(self):
+        profile = self.request.user.profile
+        queryset = Review.objects.filter(user=profile)
+        return queryset
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(
+            data=request.data
+        )
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        res = {
+            'message': 'review has been successfully Submitted',
+            'status': status.HTTP_201_CREATED,
+            'serializer': serializer.data
+        }
+        return Response(res)
+
+    def perform_create(self, serializer):
+        id = self.request
+        serializer.save(school=self.request.user.profile.id)
+    
+    '''
 
 
-class DisplayReview(generics.RetrieveAPIView):
+class DisplayReview(generics.ListAPIView):
     serializer_class = ReviewSerializer
     permissions = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = Review.objects.all()
 
+    '''
     def get_queryset(self):
-        user_id = self.request.user.id
+        user_id = self.request.user.profile_id
         queryset = Review.objects.filter(id=user_id)
         return queryset
+    '''

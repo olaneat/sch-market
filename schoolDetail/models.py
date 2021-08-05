@@ -91,7 +91,6 @@ class Review(models.Model):
     reviewer_email = models.EmailField()
     rating = models.CharField(
         max_length=250, blank=True, null=True)
-
     review = models.TextField()
 
     class Meta:

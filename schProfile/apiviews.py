@@ -1,6 +1,10 @@
+from schoolDetail.models import Review
 from rest_framework import generics
 from .models import Profile
+from django.shortcuts import get_object_or_404
+from schoolDetail.serializers import ReviewSerializer
 from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
@@ -106,3 +110,28 @@ class DeleteSchoolProfile(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = schoolProfileSerializer
     queryset = Profile.objects.all()
+
+
+@api_view(['POST', 'GET'])
+@permission_classes([permissions.AllowAny])
+def school_detail(request, id, **validated_data):
+    profile = Profile.objects.filter(id=id)
+    reviews = Review.objects.all()
+    new_review = True
+    if request.method == 'POST':
+        serializer = schoolProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            new_review = serializer.save(**validated_data)
+            #new_review = serializer.save(commit=False)
+            new_review.review = profile
+            new_review.save()
+    else:
+        new_review = ReviewSerializer()
+
+    res = {
+        'message': 'review Added successfully',
+        'success': 'OK',
+        'status': status.HTTP_200_OK,
+        'serializer': serializer.data
+    }
+    return Response(res)
