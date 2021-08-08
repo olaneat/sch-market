@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 from typing import cast
+
+from django.urls import conf
 from decouple import config
 from datetime import timedelta
 
@@ -12,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
@@ -167,12 +169,7 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
-SENDGRID_API_KEY = config('SENDGRID_API_KEY')
-EMAIL_HOST = 'smtp.sendgrid.net'
-EMAIL_HOST_USER = config('SENDGRID_API_KEY')
-EMAIL_HOST_PASSWORD = config('SENDGRID_API_KEY')
-EMAIL_PORT = config('EMAIL_PORT', cast=int)
-EMAIL_USE_TLS = True
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -193,8 +190,6 @@ USE_TZ = False
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-
-
 '''SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
@@ -204,3 +199,10 @@ JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': timedelta(seconds=3600),
 }
 '''
+
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ.get('email')
+EMAIL_HOST_PASSWORD = os.environ.get('password')

@@ -29,7 +29,7 @@ class GallerySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Gallery
-        fields = ('picture',)
+        fields = ('picture', 'id')
 
 
 class VideoSerializer(serializers.ModelSerializer):
@@ -53,8 +53,8 @@ class AdmissionFormSerializer(serializers.ModelSerializer):
         fields = ('admission_form', 'school')
 
 
-class EnquirySerialiazer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Enquiry
-        fields = ('title', 'school', 'sender_email', 'enquiry')
+class EnquirySerialiazer(serializers.Serializer):
+    subject = serializers.CharField(max_length=255)
+    body = serializers.CharField()
+    recipient_email = serializers.EmailField()
+    contact_email = serializers.EmailField()

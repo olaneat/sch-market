@@ -7,6 +7,8 @@ from rest_framework import permissions
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import HttpResponse
+from wsgiref.util import FileWrapper
 from rest_framework.views import APIView
 from rest_framework import filters
 from .models import Profile
@@ -135,3 +137,16 @@ def school_detail(request, id, **validated_data):
         'serializer': serializer.data
     }
     return Response(res)
+
+
+class AdmissionDownload(generics.RetrieveAPIView):
+    def get(self, request, id,  format=None, **kwargs):
+        queryset = super().get_context_data(**kwargs)
+        instance = self.get_object()
+        #queryset = Profile.gallery(id=id)
+        file_handle = instance.file.path
+        document = open(file_handle, 'rb')
+        res = HttpResponse(FileWrapper(document),
+                           content_type='application/msword')
+        res['Content-Disposition'] = 'attachment; filename"%s"' % queryset.file.name
+        return res
