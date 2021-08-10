@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Gallery, Admission, SchoolVideo, PrincipalDetails, Review, Enquiry
+from .models import Gallery, Admission, SchoolVideo, PrincipalDetails, Review
 from schProfile.models import Profile
 
 

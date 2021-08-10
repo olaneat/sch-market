@@ -15,7 +15,7 @@ from sendgrid.helpers.mail import (Mail, Email, Personalization)
 from decouple import config
 from python_http_client import exceptions
 from schMartket.settings import SENDGRID_API_KEY
-from .models import Gallery, Admission, SchoolVideo, Enquiry, PrincipalDetails, Review
+from .models import Gallery, Admission, SchoolVideo, PrincipalDetails, Review
 from rest_framework import permissions
 
 
@@ -299,18 +299,19 @@ class SendMail(generics.GenericAPIView):
 
     def post(self, request):
         review = request.data
+
         serializer = self.serializer_class(data=review)
         serializer.is_valid(raise_exception=True)
-        review.data = serializer.data
-        recipient = request.data['recipient_email']
-        subject = request.data['subject']
-        body = request.data['body'] + '\n' + request.data['contact_email']
+        #review.data = serializer.data
+        recipient = review['recipient_email']
+        subject = review['subject']
+        body = review['body'] + '\n' + review['contact_email']
         data = {
             'recipient': recipient,
             'subject': subject,
             'body': body
         }
-
+        print(data)
         Utils.send_mail(data)
         res = {
             'message': 'Thank you, Message Sent Successfully',

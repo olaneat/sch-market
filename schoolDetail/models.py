@@ -70,19 +70,6 @@ class SchoolVideo(models.Model):
         return self.school.school_name
 
 
-class Enquiry(models.Model):
-    school = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name='enquiry')
-    title = models.CharField(max_length=255)
-    sender_email = models.EmailField()
-    enquiry = models.TextField()
-
-    class Meta:
-        ordering = ['-title']
-
-        def __str__(self):
-            return self.title
-
 
 class Review(models.Model):
     school = models.ForeignKey(
