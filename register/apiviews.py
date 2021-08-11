@@ -121,23 +121,27 @@ class RequestPasswordResetAPIView(generics.GenericAPIView):
     serializers_class = RequestNewPasswordSerializer
 
     def post(self, request):
-        serializer = serializers.serializers_class(data=request.data)
+        serializer = self.serializers_class(data=request.data)
         email = request.data['email']
         if CustomUser.objects.filter(email=email).exists():
             user = CustomUser.objects.get(email=email)
-            uidb64 = urlsafe_base64_encode(user.id)
+            uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
             token = PasswordResetTokenGenerator().make_token(user)
-            current_site = get_current_site(
-                request=request).domain
+            current_site = get_current_site(request=request).domain
             relativeLink = reverse(
-                'password-reset-confirmed', kwargs={'uidb64': uidb64, 'token': token})
+                'register:password-reset-confirmed', kwargs={'uidb64': uidb64, 'token': token})
             absUrl = 'http://' + current_site+relativeLink
-            email_body = 'Hi  Click on the Link below to change your password \n' + absUrl
+            body = 'Hi  Click on the Link below to change your password \n' + absUrl
             data = {
-                'email_body': email_body, "to": user.email,
+                'body': body, "to": user.email,
                 "subject": "Password Reset Link"
             }
             Utils.send_mail(data)
+        res = {
+            'message': 'Password Reset link sent to Your',
+            'status': status.HTTP_200_OK,
+        }
+        return Response(res)
         # return super().validate(attrs)
 
 
@@ -147,11 +151,17 @@ class PasswordTokenAPIView(generics.GenericAPIView):
             id = smart_str(urlsafe_base64_decode(uidb64))
             user = CustomUser.objects.get(id=id)
             if not PasswordResetTokenGenerator().check_token(user, token):
-                return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
-            return Response({'success': True, 'message': 'Done', 'uidb64': uidb64, 'token': token}, status=status.HTTP_200_OK)
+                res = {'error': 'Invalid Token',
+                       'status': status.HTTP_401_UNAUTHORIZED}
+                return Response(res)
+            res = {'success': True, 'message': 'Done', 'uidb64': uidb64,
+                   'token': token, 'status': status.HTTP_200_OK}
+            return Response(res)
         except DjangoUnicodeDecodeError as identifer:
             if not PasswordResetTokenGenerator().check_token(user):
-                return Response({'error': 'Invalid Token'}, status=status.HTTP_401_UNAUTHORIZED)
+                res = {'error': 'Invalid Token',
+                       'status': status.HTTP_401_UNAUTHORIZED}
+        return Response(res)
 
 
 class CreatePasswordAPI(generics.GenericAPIView):
