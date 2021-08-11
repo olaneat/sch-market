@@ -1,8 +1,14 @@
+from schoolDetail.models import Review
 from rest_framework import generics
 from .models import Profile
+from django.shortcuts import get_object_or_404
+from schoolDetail.serializers import ReviewSerializer
 from rest_framework import permissions
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework import status
+from django.http import HttpResponse
+from wsgiref.util import FileWrapper
 from rest_framework.views import APIView
 from rest_framework import filters
 from .models import Profile
@@ -33,9 +39,11 @@ class CreateProfileView(generics.CreateAPIView):
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+            serializer.data,
+            status=status.HTTP_201_CREATED,
+            headers=headers
+
         )
-        print('profile created successfully')
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -90,12 +98,55 @@ class UpdateSchoolProfile(generics.UpdateAPIView):
         badge = schoolProfileSerializer(data=request.data)
         if badge.is_valid():
             badge.save()
-            return Response(badge.data, status=status.HTTP_200_OK)
+            response = {
+                'message': 'Profile successfully created',
+                'status': status.HTTP_200_OK,
+                'success': True
+            }
+            return Response(badge.data, response)
         else:
-            return Response(badge.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(badge.errors,  status=status.HTTP_400_BAD_REQUEST)
 
 
 class DeleteSchoolProfile(generics.DestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = schoolProfileSerializer
     queryset = Profile.objects.all()
+
+
+@api_view(['POST', 'GET'])
+@permission_classes([permissions.AllowAny])
+def school_detail(request, id, **validated_data):
+    profile = Profile.objects.filter(id=id)
+    reviews = Review.objects.all()
+    new_review = True
+    if request.method == 'POST':
+        serializer = schoolProfileSerializer(data=request.data)
+        if serializer.is_valid():
+            new_review = serializer.save(**validated_data)
+            #new_review = serializer.save(commit=False)
+            new_review.review = profile
+            new_review.save()
+    else:
+        new_review = ReviewSerializer()
+
+    res = {
+        'message': 'review Added successfully',
+        'success': 'OK',
+        'status': status.HTTP_200_OK,
+        'serializer': serializer.data
+    }
+    return Response(res)
+
+
+class AdmissionDownload(generics.RetrieveAPIView):
+    def get(self, request, id,  format=None, **kwargs):
+        queryset = super().get_context_data(**kwargs)
+        instance = self.get_object()
+        #queryset = Profile.gallery(id=id)
+        file_handle = instance.file.path
+        document = open(file_handle, 'rb')
+        res = HttpResponse(FileWrapper(document),
+                           content_type='application/msword')
+        res['Content-Disposition'] = 'attachment; filename"%s"' % queryset.file.name
+        return res

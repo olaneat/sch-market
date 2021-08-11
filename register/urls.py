@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from . import views
-from .apiviews import UserDetail, RegistrationAPIView, LoginAPIView, PasswordTokenAPIView, RequestPasswordResetAPIView, CreatePasswordAPI
+from .apiviews import UserDetail, RegistrationAPIView, LoginAPIView, PasswordTokenAPIView, RequestPasswordResetAPIView, CreatePasswordAPI, ChangePasswordAPI
 from . import apiviews
 from django.urls import reverse_lazy
 
@@ -14,7 +14,9 @@ urlpatterns = [
     path('password-reset/<uidb64>/<token>/',
          PasswordTokenAPIView.as_view(), name='password-reset-confirmed'),
     path('password-reset-successful',
-         CreatePasswordAPI.as_view(), name='password_changed')
+         CreatePasswordAPI.as_view(), name='password_changed'),
+    path('<int:pk>/change-password',
+         ChangePasswordAPI.as_view(), name="change-password")
 
 ]
 

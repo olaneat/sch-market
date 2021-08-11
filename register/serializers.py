@@ -134,3 +134,42 @@ class CreatePasswordSerializer(serializers.Serializer):
             return user
         except Exception as e:
             print(e)
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(
+        min_length=6, max_length=255, write_only=True)
+    new_password = serializers.CharField(
+        min_length=6, max_length=255, write_only=True)
+    confirm_password = serializers.CharField(
+        min_length=6, max_length=255, write_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = ('old_password', 'new_password', 'confirm_password')
+
+    def validate(self, attrs):
+        if attrs['new_password'] != attrs['confirm_password']:
+            raise serializers.ValidationError('password: Password must match')
+        return attrs
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Old Password not Correct')
+        return value
+
+    def update(self, instance, validated_data):
+        user = self.context['request'].user
+        if user.pk != instance.pk:
+            raise serializers.ValidationError(
+                'You Don\'t have permission to change this password')
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+
+        res = {
+            'instance': instance,
+            'message': 'Password successfully Updated',
+            'status': status.HTTP_200_OK
+        }
+        return Response(res)
