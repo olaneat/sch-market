@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 from . import views
-from .apiviews import UserDetail, RegistrationAPIView, LoginAPIView, PasswordTokenAPIView, RequestPasswordResetAPIView, CreatePasswordAPI
+from .apiviews import UserDetail, RegistrationAPIView, LoginAPIView, PasswordTokenAPIView, RequestPasswordResetAPIView, CreatePasswordAPI, ChangePasswordAPI
 from . import apiviews
 
 app_name = 'register'
@@ -13,7 +13,9 @@ urlpatterns = [
     path('request-password', RequestPasswordResetAPIView.as_view(),
          name='request-password'),
     path('password-reset-successful',
-         CreatePasswordAPI.as_view(), name='password_changed')
+         CreatePasswordAPI.as_view(), name='password_changed'),
+    path('<int:pk>/change-password',
+         ChangePasswordAPI.as_view(), name="change-password")
 
 ]
 

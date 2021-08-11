@@ -6,15 +6,10 @@ from .serializers import GallerySerializer, AdmissionFormSerializer, VideoSerial
 from rest_framework.response import Response
 from schProfile.models import Profile
 from rest_framework import status
-from .utils import Utils
+from register.utils import Utils
 from wsgiref.util import FileWrapper
 from django.http import Http404, HttpResponse
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
-import sendgrid
-from sendgrid.helpers.mail import (Mail, Email, Personalization)
-from decouple import config
-from python_http_client import exceptions
-from schMartket.settings import SENDGRID_API_KEY
 from .models import Gallery, Admission, SchoolVideo, PrincipalDetails, Review
 from rest_framework import permissions
 
@@ -291,9 +286,6 @@ class DownAdmission(generics.RetrieveAPIView):
         return res
 
 
-sg = sendgrid.SendGridAPIClient(SENDGRID_API_KEY)
-
-
 class SendMail(generics.GenericAPIView):
     serializer_class = EnquirySerialiazer
 
@@ -314,7 +306,7 @@ class SendMail(generics.GenericAPIView):
         print(data)
         Utils.send_mail(data)
         res = {
-            'message': 'Thank you, Message Sent Successfully',
+            'message': 'Message Sent Successfully',
             'status': status.HTTP_200_OK,
             'code': 'OK',
             data: serializer.data

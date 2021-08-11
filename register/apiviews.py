@@ -8,7 +8,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
 from django.contrib.auth import authenticate, login
-from .serializers import RegistrationSerializer, CreatePasswordSerializer, LoginSerializer, RequestNewPasswordSerializer
+from .serializers import RegistrationSerializer, CreatePasswordSerializer, ChangePasswordSerializer, LoginSerializer, RequestNewPasswordSerializer
 from register.models import CustomUser
 from . import permissions
 from register import serializers
@@ -161,3 +161,9 @@ class CreatePasswordAPI(generics.GenericAPIView):
         serializer = self.serializers_class(data=request.data)
         serializer.is_valid(raise_exception=True)
         return Response({'success': True, 'message': 'Password changed Successfully'}, status=status.HTTP_200_OK)
+
+
+class ChangePasswordAPI(generics.UpdateAPIView):
+    serializer_class = ChangePasswordSerializer
+    queryset = CustomUser.objects.all()
+    permissions_classes = [IsAuthenticated]
