@@ -309,7 +309,7 @@ class SendMail(generics.GenericAPIView):
             'message': 'Message Sent Successfully',
             'status': status.HTTP_200_OK,
             'code': 'OK',
-            data: serializer.data
+            'data': serializer.data
         }
         return Response(res)
 

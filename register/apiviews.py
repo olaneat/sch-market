@@ -17,7 +17,7 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
-from .utils import Utils
+from schoolDetail.utils import Utils
 
 
 class UserDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -133,7 +133,7 @@ class RequestPasswordResetAPIView(generics.GenericAPIView):
             absUrl = 'http://' + current_site+relativeLink
             body = 'Hi  Click on the Link below to change your password \n' + absUrl
             data = {
-                'body': body, "to": user.email,
+                'body': body, "recipient": user.email,
                 "subject": "Password Reset Link"
             }
             Utils.send_mail(data)
