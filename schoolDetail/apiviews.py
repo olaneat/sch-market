@@ -6,7 +6,7 @@ from .serializers import GallerySerializer, AdmissionFormSerializer, VideoSerial
 from rest_framework.response import Response
 from schProfile.models import Profile
 from rest_framework import status
-from register.utils import Utils
+from .utils import Utils
 from wsgiref.util import FileWrapper
 from django.http import Http404, HttpResponse
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
