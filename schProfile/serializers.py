@@ -1,4 +1,6 @@
+from django.db import models
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
+from schoolDetail.models import Gallery
 from rest_framework import serializers
 #from django.core.files.base import ContentFile
 from django.conf import settings
@@ -7,6 +9,7 @@ import imghdr
 import six
 import uuid
 from .models import Profile
+from schoolDetail.serializers import PricipalDetailSerialiazer, EnquirySerialiazer, GallerySerializer, ReviewSerializer, VideoSerializer, AdmissionFormSerializer
 from register.models import CustomUser
 
 
@@ -42,6 +45,11 @@ class schoolProfileSerializer(serializers.ModelSerializer):
     )
     email = serializers.CharField(source="user.email", read_only=True)
     username = serializers.CharField(source="user.username", read_only=True)
+    principal_detail = PricipalDetailSerialiazer(required=False)
+    gallery = GallerySerializer(many=True, read_only=True)
+    school_video = serializers.StringRelatedField(many=True, read_only=True)
+    review = ReviewSerializer(many=True, read_only=True)
+    admission_form = AdmissionFormSerializer(many=True, read_only=True)
 
     class Meta:
         model = Profile
@@ -49,7 +57,13 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             "email",
             "id",
             "username",
+            'competitive_advantage',
             "school_name",
+            'admission_form',
+            'principal_detail',
+            'gallery',
+            'school_video',
+            'review',
             "school_address",
             "school_badge",
             "school_gender",
@@ -69,15 +83,16 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             "school_motto"
         )
 
-        def create(self, validated_data, instance=None):
-            if "user" in validated_data:
-                user = validated_data.pop("user")
-            else:
-                user = CustomUser.objects.create(**validated_data)
-            profile, create_profile = Profile.objects.update_or_create(
-                user=user, defaults=validated_data
-            )
-            return profile
+    def create(self, validated_data, instance=None):
+        if "user" in validated_data:
+            user = validated_data.pop("user")
+        else:
+            user = CustomUser.objects.create(**validated_data)
+        gallery = validated_data.pop('school_gallery')
+        profile = Profile.objects.update_or_create(
+            user=user, defaults=validated_data
+        )
+        return profile
 
 
 def get_username(self, obj):
