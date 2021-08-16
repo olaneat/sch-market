@@ -18,28 +18,25 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='SchoolVideo',
             fields=[
-<<<<<<< HEAD
                 ('id', models.AutoField(auto_created=True,
                  primary_key=True, serialize=False, verbose_name='ID')),
                 ('intro_video', models.FileField(
                     blank=True, null=True, upload_to='assets/videos')),
-                ('user', models.OneToOneField(
-                    on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-=======
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('intro_video', models.FileField(blank=True, null=True, upload_to='assets/videos')),
-                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='school_video', to='schProfile.profile')),
+                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='school_video', to='schProfile.profile')),
             ],
         ),
         migrations.CreateModel(
             name='Review',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(blank=True, max_length=250, null=True)),
                 ('reviewer_email', models.EmailField(max_length=254)),
                 ('rating', models.CharField(blank=True, max_length=250, null=True)),
                 ('review', models.TextField()),
-                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='review', to='schProfile.profile')),
+                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='review', to='schProfile.profile')),
             ],
             options={
                 'ordering': ('-name',),
@@ -48,13 +45,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='PrincipalDetails',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('principal_name', models.CharField(max_length=255)),
                 ('phone_number', models.CharField(max_length=255)),
                 ('display_image', models.FileField(upload_to='assests/principal')),
                 ('post_held', models.CharField(max_length=255)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='principal_detail', to='schProfile.profile')),
->>>>>>> 14f8d9c5a9ffdb37dd7a2fa388815ba86afa1725
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='principal_detail', to='schProfile.profile')),
             ],
             options={
                 'ordering': ('-principal_name',),
@@ -63,9 +61,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Note',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('note', models.CharField(max_length=100)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('user', models.ForeignKey(
+                    on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
@@ -74,12 +74,13 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True,
                  primary_key=True, serialize=False, verbose_name='ID')),
                 ('picture', models.FileField(upload_to='sch-detail/sch-gallery')),
-<<<<<<< HEAD
+                << << << < HEAD
                 ('school', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-=======
-                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='gallery', to='schProfile.profile')),
->>>>>>> 14f8d9c5a9ffdb37dd7a2fa388815ba86afa1725
+                == == == =
+                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='gallery', to='schProfile.profile')),
+                >>>>>> > 14f8d9c5a9ffdb37dd7a2fa388815ba86afa1725
             ],
             options={
                 'verbose_name': 'School Gallery',
@@ -90,11 +91,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Enquiry',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.AutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=255)),
                 ('sender_email', models.EmailField(max_length=254)),
                 ('enquiry', models.TextField()),
-                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='enquiry', to='schProfile.profile')),
+                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='enquiry', to='schProfile.profile')),
             ],
             options={
                 'ordering': ['-title'],
@@ -103,17 +106,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Admission',
             fields=[
-<<<<<<< HEAD
+                << << << < HEAD
                 ('id', models.AutoField(auto_created=True,
                  primary_key=True, serialize=False, verbose_name='ID')),
                 ('letter', models.FileField(upload_to='sch-detail/addmission-leta')),
                 ('school', models.ForeignKey(
                     on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-=======
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('admission_form', models.FileField(upload_to='sch-detail/addmission-leta')),
-                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='admission', to='schProfile.profile')),
->>>>>>> 14f8d9c5a9ffdb37dd7a2fa388815ba86afa1725
+                == == == =
+                ('id', models.AutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
+                ('admission_form', models.FileField(
+                    upload_to='sch-detail/addmission-leta')),
+                ('school', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                 related_name='admission', to='schProfile.profile')),
+                >>>>>> > 14f8d9c5a9ffdb37dd7a2fa388815ba86afa1725
             ],
         ),
     ]
