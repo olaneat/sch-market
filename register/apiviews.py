@@ -132,7 +132,7 @@ class RequestPasswordResetAPIView(generics.GenericAPIView):
                 'register:password-reset-confirmed', kwargs={'uidb64': uidb64, 'token': token})
             django_absUrl = 'http://' + current_site + dRelativeLink
 
-            local_host = 'localhost:4200/#/account/'
+            local_host = 'http://localhost:4200/#/account/'
             relativeLink = 'update-password/'+uidb64+' /'+token
             absUrl = local_host+relativeLink
             body = 'Hi  Click on the Link below to change your password \n' + absUrl

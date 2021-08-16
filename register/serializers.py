@@ -109,7 +109,7 @@ class RequestNewPasswordSerializer(serializers.Serializer):
 class CreatePasswordSerializer(serializers.Serializer):
     password = serializers.CharField(
         min_length=1, max_length=50, write_only=True)
-    password2 = serializers.CharField(
+    confirm_password = serializers.CharField(
         min_length=1, max_length=50, write_only=True)
     token = serializers.CharField(
         min_length=1, max_length=50, write_only=True)
@@ -122,14 +122,14 @@ class CreatePasswordSerializer(serializers.Serializer):
     def validate(self, attrs):
         try:
             password = attrs.get('password')
-            password2 = attrs.get('password2')
+            confirm_password = attrs.get('confirm_password')
             token = attrs.get('token')
             uidb64 = attrs.get('uidb64')
 
             id = force_str(urlsafe_base64_decode(uidb64))
             user = CustomUser.objects.get(id=id)
-            if password != password2:
-                raise serializers.ValidationException('password didnt match')
+            if password != confirm_password:
+                raise serializers.ValidationError('password didnt match')
 
             if not PasswordResetTokenGenerator().check_token(user, token):
                 raise Exception()
@@ -139,6 +139,8 @@ class CreatePasswordSerializer(serializers.Serializer):
             return user
         except Exception as e:
             print(e)
+
+        return attrs
 
 
 class ChangePasswordSerializer(serializers.Serializer):
