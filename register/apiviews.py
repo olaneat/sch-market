@@ -128,9 +128,13 @@ class RequestPasswordResetAPIView(generics.GenericAPIView):
             uidb64 = urlsafe_base64_encode(smart_bytes(user.id))
             token = PasswordResetTokenGenerator().make_token(user)
             current_site = get_current_site(request=request).domain
-            relativeLink = reverse(
+            dRelativeLink = reverse(
                 'register:password-reset-confirmed', kwargs={'uidb64': uidb64, 'token': token})
-            absUrl = 'http://' + current_site+relativeLink
+            django_absUrl = 'http://' + current_site + dRelativeLink
+
+            local_host = 'localhost:4200/#/account/'
+            relativeLink = 'update-password/'+uidb64+' /'+token
+            absUrl = local_host+relativeLink
             body = 'Hi  Click on the Link below to change your password \n' + absUrl
             data = {
                 'body': body, "recipient": user.email,
@@ -140,6 +144,8 @@ class RequestPasswordResetAPIView(generics.GenericAPIView):
         res = {
             'message': 'Password Reset link sent to Your',
             'status': status.HTTP_200_OK,
+            'uidb64': uidb64,
+            'token': token
         }
         return Response(res)
         # return super().validate(attrs)
@@ -165,7 +171,7 @@ class PasswordTokenAPIView(generics.GenericAPIView):
 
 
 class CreatePasswordAPI(generics.GenericAPIView):
-    serializers = CreatePasswordSerializer
+    serializers_class = CreatePasswordSerializer
 
     def patch(self, request):
         serializer = self.serializers_class(data=request.data)
