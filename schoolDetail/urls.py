@@ -1,6 +1,9 @@
 from os import name
 from django.urls import path
-from .apiviews import DisplayGalleryApi, GalleryApi, SendMail,  RetrieveAdmissionForm, EnquiryView, DisplayVideo, SchoolVideoAPi, DownAdmission, DisplayPrincipalDetialView, ReviewAPIView, DisplayReview,  CreatePrincipalDetailView, updatePrincipalDetail
+from .apiviews import (DisplayGalleryApi, GalleryApi, SendMail,
+                       RetrieveAdmissionForm, EnquiryView, DisplayVideo, SchoolVideoAPi,
+                       DownAdmission, DisplayPrincipalDetialView, ReviewAPIView, DisplayReview,
+                       CreatePrincipalDetailView, updatePrincipalDetail, create_review)
 
 app_name = 'sch-detail'
 urlpatterns = [
@@ -22,6 +25,6 @@ urlpatterns = [
          name="update-principal_detail"),
     path('download-addmission/<int:pk>',
          DownAdmission.as_view(), name='download'),
-    path('send-mail', SendMail.as_view(), name='send-mail')
-
+    path('send-mail', SendMail.as_view(), name='send-mail'),
+    path('<int:pk>/create-review', create_review, name='create-review')
 ]

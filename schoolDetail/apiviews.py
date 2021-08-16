@@ -1,11 +1,12 @@
 from os import stat
 from django.dispatch.dispatcher import receiver
-from django.urls import conf
+from rest_framework.decorators import api_view
 from rest_framework import generics
 from .serializers import GallerySerializer, AdmissionFormSerializer, VideoSerializer, ReviewSerializer, PricipalDetailSerialiazer, EnquirySerialiazer
 from rest_framework.response import Response
 from schProfile.models import Profile
 from rest_framework import status
+from django.shortcuts import get_object_or_404
 from .utils import Utils
 from wsgiref.util import FileWrapper
 from django.http import Http404, HttpResponse
@@ -290,14 +291,14 @@ class SendMail(generics.GenericAPIView):
     serializer_class = EnquirySerialiazer
 
     def post(self, request):
-        review = request.data
+        enquiry = request.data
 
-        serializer = self.serializer_class(data=review)
+        serializer = self.serializer_class(data=enquiry)
         serializer.is_valid(raise_exception=True)
         #review.data = serializer.data
-        recipient = review['recipient_email']
-        subject = review['subject']
-        body = review['body'] + '\n' + review['contact_email']
+        recipient = enquiry['recipient_email']
+        subject = enquiry['subject']
+        body = enquiry['body'] + '\n' + enquiry['contact_email']
         data = {
             'recipient': recipient,
             'subject': subject,
@@ -348,4 +349,34 @@ class SendMail(generics.GenericAPIView):
                      'contact_email': contact_email, 'body': body}
         SendMail.send_mail(self, template_id, sender, recipient_email, data_dict)
         return Response({'status': status.HTTP_200_OK, 'message': 'message successfully sent'})
+
+class CreateReview(generics.GenericAPIView):
+    serializer_class = ReviewSerializer
+    def get_queryset(self, request, **kwargs):
+        school_id  =Profile.objects.get(id=id)
+        queryset = Review.objects.filter()
+
 '''
+
+
+@api_view(['GET', 'POST'])
+def create_review(request,  pk, **validated_data,):
+    id = Profile.objects.get(id=pk)
+    print(pk)
+    #school_id = Profile.objects.get(id=schoo)
+    school = get_object_or_404(Profile, id=pk)
+    if request.method == 'POST':
+        serializer = ReviewSerializer(data=request.data)
+        if serializer.is_valid(**validated_data):
+            review = serializer.save(school_id=pk)
+            review.school = school
+            review.save()
+            res = {
+                'message': 'Review Submitted Successfully',
+                'status': status.HTTP_200_OK,
+                'serializer': serializer.data
+            }
+            return Response(res)
+    else:
+        serializer = ReviewSerializer()
+    return Response({'request': request, 'serializer': serializer})
