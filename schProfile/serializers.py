@@ -37,6 +37,10 @@ class Base64Imagefield(serializers.ImageField):
         return extension
 
 
+class SearchSerializer(serializers.Serializer):
+    school_name = serializers.CharField(max_length=255)
+
+
 class schoolProfileSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(source="user.id", read_only=True)
     parser_classes = (
