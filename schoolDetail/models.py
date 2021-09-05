@@ -44,7 +44,7 @@ class Admission(models.Model):
 class Gallery(models.Model):
     school = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name='gallery')
-    picture = models.FileField(upload_to='sch-detail/sch-gallery')
+    picture = models.FileField(upload_to='assets/sch-gallery')
 
     class Meta:
         verbose_name = 'School Gallery'

@@ -71,7 +71,7 @@ class DynamicSearchFilter(filters.SearchFilter):
 
 
 class SchoolSearch(generics.ListAPIView):
-    filter_backends = (DynamicSearchFilter,)
+    filter_backends = (filters.SearchFilter,)
     serializer_class = SearchSerializer
     search_fields = ['school_name', 'school_state']
     queryset = Profile.objects.all()
