@@ -17,6 +17,7 @@ django-rest-passwordreset==1.2.0
 djangorestframework==3.12.2
 djangorestframework-jwt==1.11.0
 djangorestframework-simplejwt==4.5.0
+gunicorn==20.1.0
 html5lib==1.0.1
 idna==2.8
 ipaddr==2.2.0
@@ -30,6 +31,7 @@ progress==1.5
 pycparser==2.20
 PyJWT==1.7.1
 pyparsing==2.4.6
+python-decouple==3.4
 python-http-client==3.3.2
 python3-openid==3.2.0
 pytoml==0.1.21
