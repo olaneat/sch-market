@@ -1,14 +1,14 @@
 import os
 from pathlib import Path
 from typing import cast
-
-from django.urls import conf
+import django_heroku
 from decouple import config
 from datetime import timedelta
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
+
 
 DEBUG = config('DEBUG', cast=bool)
 
@@ -201,3 +201,4 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
+django_heroku.settings(locals())

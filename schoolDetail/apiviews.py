@@ -236,44 +236,11 @@ class ReviewAPIView(generics.CreateAPIView):
             serializer.save(user=profile)
         serializer.save()
 
-    '''
-  
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(
-            data=request.data
-        )
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        res = {
-            'message': 'review has been successfully Submitted',
-            'status': status.HTTP_201_CREATED,
-            'serializer': serializer.data
-        }
-        return Response(res)
-
-    def perform_create(self, serializer):
-        id = self.request
-        serializer.save(school=self.request.user.profile.id)
-    
-    get_queyset(self):
-        profile = self.request.user.profile
-        queryset = Review.objects.filter(user=profile)
-        return queryset
-    '''
-
 
 class DisplayReview(generics.ListAPIView):
     serializer_class = ReviewSerializer
     permissions = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Review.objects.all()
-
-    '''
-    def get_queryset(self):
-        user_id = self.request.user.profile_id
-        queryset = Review.objects.filter(id=user_id)
-        return queryset
-    '''
 
 
 class DownAdmission(generics.RetrieveAPIView):
