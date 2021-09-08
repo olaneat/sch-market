@@ -1,6 +1,11 @@
 from django.urls import path
 from . import apiviews
-from .apiviews import CreateProfileView, UpdateSchoolProfile, DeleteSchoolProfile, DispaySchoolDetail, DisplaySchoolList, AdmissionDownload
+from .apiviews import (
+    CreateProfileView, UpdateSchoolProfile,
+    DeleteSchoolProfile, DispaySchoolDetail,
+    DisplaySchoolList, AdmissionDownload,
+    SchoolSearch
+)
 
 app_name = 'profile'
 urlpatterns = [
@@ -10,4 +15,5 @@ urlpatterns = [
     path('download/<int:id>', AdmissionDownload.as_view(), name='download'),
     path('update/<int:pk>', UpdateSchoolProfile.as_view(), name="update-profile"),
     path('delete/<int:pk>', DeleteSchoolProfile.as_view(), name="delete_profile"),
+    path('school-search', SchoolSearch.as_view(), name='search-school')
 ]

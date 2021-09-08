@@ -44,7 +44,7 @@ class Admission(models.Model):
 class Gallery(models.Model):
     school = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name='gallery')
-    picture = models.FileField(upload_to='sch-detail/sch-gallery')
+    picture = models.FileField(upload_to='assets/sch-gallery')
 
     class Meta:
         verbose_name = 'School Gallery'
@@ -70,18 +70,17 @@ class SchoolVideo(models.Model):
         return self.school.school_name
 
 
-
 class Review(models.Model):
     school = models.ForeignKey(
         Profile, on_delete=models.CASCADE, related_name='review')
     name = models.CharField(max_length=250, blank=True, null=True)
-    reviewer_email = models.EmailField()
     rating = models.CharField(
         max_length=250, blank=True, null=True)
     review = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        ordering = ('-name',)
+        ordering = ('-created',)
 
     def __str__(self):
         return self.title

@@ -36,6 +36,7 @@ class Profile(models.Model):
     awards_won = models.TextField()
     created = models.DateTimeField(auto_now=True)
     updated = models.DateTimeField(auto_now_add=True)
+    view_count = models.IntegerField(default=0)
 
     class Meta:
         ordering = ('school_name', 'created',)

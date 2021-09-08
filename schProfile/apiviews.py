@@ -1,20 +1,19 @@
-from schoolDetail.models import Review
-from rest_framework import generics
-from .models import Profile
-from django.shortcuts import get_object_or_404
-from schoolDetail.serializers import ReviewSerializer
-from rest_framework import permissions
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework import status
-from django.http import HttpResponse
-from wsgiref.util import FileWrapper
-from rest_framework.views import APIView
-from rest_framework import filters
-from .models import Profile
-from .serializers import schoolProfileSerializer
+from datetime import datetime
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
-
+from .serializers import SearchSerializer, schoolProfileSerializer
+from rest_framework import filters
+from rest_framework.views import APIView
+from wsgiref.util import FileWrapper
+from django.http import HttpResponse
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework import permissions
+from schoolDetail.serializers import ReviewSerializer
+from django.shortcuts import get_object_or_404
+from .models import Profile
+from rest_framework import generics
+from schoolDetail.models import Review
 
 '''
     class CustomSearchFilter(filters.SearchFilter):
@@ -64,8 +63,19 @@ class CreateProfileView(generics.CreateAPIView):
   '''
 
 
-class DisplaySchoolList(generics.ListAPIView):
+class DynamicSearchFilter(filters.SearchFilter):
+    def get_search_fields(self, view, request):
+        return request.GET.getlist('search_fields', [])
+
+
+class SchoolSearch(generics.ListAPIView):
     filter_backends = (filters.SearchFilter,)
+    serializer_class = SearchSerializer
+    search_fields = ['school_name', 'school_state']
+    queryset = Profile.objects.all()
+
+
+class DisplaySchoolList(generics.ListAPIView):
     queryset = Profile.objects.exclude(school_name='')
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = schoolProfileSerializer
@@ -81,6 +91,18 @@ class DispaySchoolDetail(generics.RetrieveAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = schoolProfileSerializer
     queryset = Profile.objects.all()
+    today = datetime.now().day
+    starting_month = 'Aug'
+    current_month = datetime.today().strftime('%B')
+    print(current_month)
+
+    if today > 1 and starting_month == current_month:
+        starting_month = current_month
+        print('halo')
+        print(today)
+    print(starting_month)
+
+    #print('today\'s date is ' + today + current_month)
 
 
 class UpdateSchoolProfile(generics.UpdateAPIView):

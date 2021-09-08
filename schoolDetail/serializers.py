@@ -41,7 +41,7 @@ class VideoSerializer(serializers.ModelSerializer):
 class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
-        fields = ('name',  'review', 'id', 'reviewer_email', 'rating')
+        fields = ('name',  'review', 'id',  'rating')
 
 
 class AdmissionFormSerializer(serializers.ModelSerializer):
