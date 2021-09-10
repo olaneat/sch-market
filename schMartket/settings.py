@@ -15,7 +15,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['herokudjangoapp.herokuapp.com',
+ALLOWED_HOSTS = ['sch-market.herokuapp.com',
                  'localhost:4200', '127.0.0.1:8000', 'localhost:8008']
 
 
