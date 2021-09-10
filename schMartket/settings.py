@@ -47,7 +47,9 @@ INSTALLED_APPS = [
 SITE_ID = 1
 AUTH_USER_MODEL = 'register.CustomUser'
 AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
+
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -209,3 +211,4 @@ EMAIL_USE_TLS = True
 django_heroku.settings(locals())
 prod_db = dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
