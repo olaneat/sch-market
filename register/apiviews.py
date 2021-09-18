@@ -8,7 +8,11 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework.generics import RetrieveAPIView
 from django.contrib.auth import authenticate, login
-from .serializers import RegistrationSerializer, CreatePasswordSerializer, ChangePasswordSerializer, LoginSerializer, RequestNewPasswordSerializer
+from .serializers import (
+    RegistrationSerializer, CreatePasswordSerializer, 
+    ChangePasswordSerializer, LoginSerializer, 
+    RequestNewPasswordSerializer
+)
 from register.models import CustomUser
 from . import permissions
 from register import serializers
