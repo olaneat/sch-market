@@ -2,8 +2,8 @@ import os
 from pathlib import Path
 from typing import cast
 import django_heroku
-from decouple import config
 from datetime import timedelta
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -165,7 +165,7 @@ JWT_AUTH = {
     'JWT_AUTH_COOKIE': None,
 }
 
-SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+#SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
@@ -184,7 +184,7 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 MEDIA_URL = '/media/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
