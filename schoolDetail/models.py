@@ -70,7 +70,9 @@ class SchoolVideo(models.Model):
         return self.school.school_name
 
 
-class Review(models.Model):
+
+''''
+    class Review(models.Model):
     school = models.ForeignKey(
         Profile, on_delete=models.CASCADE, blank=True, null=True, related_name='review')
     name = models.CharField(max_length=250, blank=True, null=True )
@@ -84,3 +86,5 @@ class Review(models.Model):
 
     def __str__(self):
         return self.title
+
+'''

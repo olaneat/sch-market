@@ -9,11 +9,11 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import permissions
-from schoolDetail.serializers import ReviewSerializer
+#from schoolDetail.serializers import ReviewSerializer
 from django.shortcuts import get_object_or_404
 from .models import Profile
 from rest_framework import generics
-from schoolDetail.models import Review
+#from schoolDetail.models import Review
 
 '''
     class CustomSearchFilter(filters.SearchFilter):
@@ -136,11 +136,12 @@ class DeleteSchoolProfile(generics.DestroyAPIView):
     queryset = Profile.objects.all()
 
 
+'''
 @api_view(['POST', 'GET'])
 @permission_classes([permissions.AllowAny])
 def school_detail(request, id, **validated_data):
     profile = Profile.objects.filter(id=id)
-    reviews = Review.objects.all()
+    #reviews = Review.objects.all()
     new_review = True
     if request.method == 'POST':
         serializer = schoolProfileSerializer(data=request.data)
@@ -160,6 +161,7 @@ def school_detail(request, id, **validated_data):
     }
     return Response(res)
 
+'''
 
 class AdmissionDownload(generics.RetrieveAPIView):
     def get(self, request, id,  format=None, **kwargs):

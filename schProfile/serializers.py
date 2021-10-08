@@ -9,7 +9,7 @@ import base64
 import six
 import uuid
 from .models import Profile
-from schoolDetail.serializers import PricipalDetailSerialiazer, EnquirySerialiazer, GallerySerializer, ReviewSerializer, VideoSerializer, AdmissionFormSerializer
+from schoolDetail.serializers import PricipalDetailSerialiazer, EnquirySerialiazer, GallerySerializer, VideoSerializer, AdmissionFormSerializer
 from register.models import CustomUser
 
 
@@ -52,7 +52,7 @@ class schoolProfileSerializer(serializers.ModelSerializer):
     principal_detail = PricipalDetailSerialiazer(required=False)
     gallery = GallerySerializer(many=True, read_only=True)
     school_video = VideoSerializer(many=True, read_only=True)
-    review = ReviewSerializer(many=True, read_only=True)
+    #review = ReviewSerializer(many=True, read_only=True)
     admission_form = AdmissionFormSerializer(many=True, read_only=True)
 
     class Meta:
@@ -67,7 +67,6 @@ class schoolProfileSerializer(serializers.ModelSerializer):
             'principal_detail',
             'gallery',
             'school_video',
-            'review',
             "school_address",
             "school_badge",
             "school_gender",
