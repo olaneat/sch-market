@@ -165,6 +165,7 @@ class CreatePrincipalDetailView(generics.CreateAPIView):
         serializer.save(user=self.request.user.profile)
 
 
+
 class updatePrincipalDetail(generics.UpdateAPIView):
     serializer_class = PricipalDetailSerialiazer
     parser_classes = (MultiPartParser, FormParser)
