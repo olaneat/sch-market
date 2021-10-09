@@ -92,8 +92,12 @@ REST_FRAMEWORK = {
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'sch_market',
+        'HOST':'localhost',
+        'USERNAME': os.environ.get('Postgres_username'),
+        'PASSWORD': os.environ.get('Postgres_password') 
+
     }
 }
 

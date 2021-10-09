@@ -2,10 +2,7 @@ from os import stat
 from django.dispatch.dispatcher import receiver
 from rest_framework.decorators import api_view
 from rest_framework import generics
-from .serializers import (
-    GallerySerializer, 
-    AdmissionFormSerializer, VideoSerializer,
-     PricipalDetailSerialiazer, EnquirySerialiazer)
+from .serializers import GallerySerializer, AdmissionFormSerializer, VideoSerializer, ReviewSerializer, PricipalDetailSerialiazer, EnquirySerialiazer
 from rest_framework.response import Response
 from schProfile.models import Profile
 from rest_framework import status
@@ -14,7 +11,7 @@ from .utils import Utils
 from wsgiref.util import FileWrapper
 from django.http import Http404, HttpResponse
 from rest_framework.parsers import FileUploadParser, MultiPartParser, FormParser
-from .models import Gallery, Admission, SchoolVideo, PrincipalDetails
+from .models import Gallery, Admission, SchoolVideo, PrincipalDetails, Review
 from rest_framework import permissions
 
 
@@ -168,7 +165,6 @@ class CreatePrincipalDetailView(generics.CreateAPIView):
         serializer.save(user=self.request.user.profile)
 
 
-
 class updatePrincipalDetail(generics.UpdateAPIView):
     serializer_class = PricipalDetailSerialiazer
     parser_classes = (MultiPartParser, FormParser)
@@ -208,7 +204,6 @@ class EnquiryView(generics.CreateAPIView):
         return queryset
 
 
-'''
 class ReviewAPIView(generics.CreateAPIView):
     serializer_class = ReviewSerializer
     permissions = [permissions.AllowAny]
@@ -241,15 +236,11 @@ class ReviewAPIView(generics.CreateAPIView):
             serializer.save(user=profile)
         serializer.save()
 
-    class DisplayReview(generics.ListAPIView):
+
+class DisplayReview(generics.ListAPIView):
     serializer_class = ReviewSerializer
     permissions = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Review.objects.all()
-
-
-'''
-
-
 
 
 class DownAdmission(generics.RetrieveAPIView):

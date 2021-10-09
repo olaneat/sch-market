@@ -4,7 +4,7 @@ from schProfile.apiviews import DispaySchoolDetail
 from .apiviews import (
     DisplayGalleryApi, GalleryApi, SendMail,
     RetrieveAdmissionForm, EnquiryView, DisplayVideo, SchoolVideoAPi,
-    DownAdmission, DisplayPrincipalDetialView,
+    DownAdmission, DisplayPrincipalDetialView,  DisplayReview,
     CreatePrincipalDetailView, updatePrincipalDetail,  create_review
 )
 
@@ -24,12 +24,11 @@ urlpatterns = [
     path('create-enquiry', EnquiryView.as_view(), name="create_enquiry"),
     path('display-addmission', RetrieveAdmissionForm.as_view(),
          name='display-admission-letter'),
+    path('display-review', DisplayReview.as_view(), name="display-review"),
     path('update-prinicipal-detail/<int:pk>', updatePrincipalDetail.as_view(),
          name="update-principal_detail"),
     path('download-addmission/<int:pk>',
          DownAdmission.as_view(), name='download'),
     path('send-mail', SendMail.as_view(), name='send-mail'),
-    #path('<int:pk>/create-review', create_review, name='create-review')
-    #path('display-review', DisplayReview.as_view(), name="display-review"),
-    
+    path('<int:pk>/create-review', create_review, name='create-review')
 ]

@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import fields
 from rest_framework import serializers
-from .models import Gallery, Admission, SchoolVideo, PrincipalDetails
+from .models import Gallery, Admission, SchoolVideo, PrincipalDetails, Review
 from schProfile.models import Profile
 
 
@@ -38,11 +38,11 @@ class VideoSerializer(serializers.ModelSerializer):
         fields = ('intro_video',)
 
 
-'''class ReviewSerializer(serializers.ModelSerializer):
+class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ('name',  'review', 'id',  'rating')
-'''
+
 
 class AdmissionFormSerializer(serializers.ModelSerializer):
     school = serializers.CharField(
