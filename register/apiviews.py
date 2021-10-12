@@ -34,14 +34,14 @@ class RegistrationAPIView(APIView):
     permission_classes = [AllowAny]
     serializer_class = RegistrationSerializer
 
-    def create(self, request, *args, **kwargs):
+    '''def create(self, request, *args, **kwargs):
         serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)'''
 
     def post(self, request, format=None):
-        serializer = self.serializer_class(data=request.data)
+        serializer = RegistrationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         data = request.data
